@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bevis Tool Tx - Home Side</title>
+    <title>Bevis Tool Tx - Premium Analysis Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary-color: #9c27b0;
@@ -15,6 +16,10 @@
             --text-color: #ffffff;
             --panel-bg: rgba(40, 40, 40, 0.85);
             --glass-effect: rgba(255, 255, 255, 0.05);
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --warning-color: #FF9800;
+            --info-color: #2196F3;
         }
         
         * {
@@ -40,10 +45,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background: url('https://images.unsplash.com/photo-1643287887552-07bd4f235f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
             background-size: cover;
             z-index: -2;
-            filter: blur(8px) brightness(0.7);
+            filter: blur(8px) brightness(0.4);
         }
         
         body::after {
@@ -53,7 +58,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(50, 0, 50, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(20, 0, 30, 0.95) 0%, rgba(40, 0, 60, 0.8) 100%);
             z-index: -1;
         }
         
@@ -124,7 +129,7 @@
         
         .login-btn {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 15px 30px;
             border-radius: 8px;
@@ -154,6 +159,13 @@
         .register-link a {
             color: var(--primary-color);
             text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .google-login {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
         }
         
         .mission-container {
@@ -202,6 +214,49 @@
             box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3);
         }
         
+        /* Register Modal */
+        .register-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .register-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        .register-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .close-register {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
         /* Main App */
         .app-container {
             display: none;
@@ -245,7 +300,14 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            color: #fff;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
         }
         
         .user-balance {
@@ -269,7 +331,7 @@
         
         .logout-btn:hover {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
         }
         
         .menu-toggle {
@@ -346,7 +408,7 @@
         
         .sidebar-menu a.active {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
         }
         
         .admin-only {
@@ -395,7 +457,7 @@
         
         .tool-btn.active {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
         }
         
         .tool-btn:hover {
@@ -443,7 +505,7 @@
             font-weight: bold;
         }
         
-        input[type="number"], input[type="text"], select, textarea {
+        input[type="number"], input[type="text"], select {
             width: 100%;
             padding: 12px;
             background-color: var(--darker-bg);
@@ -454,7 +516,7 @@
             transition: all 0.3s;
         }
         
-        input[type="number"]:focus, input[type="text"]:focus, select:focus, textarea:focus {
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
@@ -462,7 +524,7 @@
         
         .submit-btn {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 8px;
@@ -541,12 +603,12 @@
         }
         
         .tai {
-            color: #4CAF50;
+            color: var(--success-color);
             text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
         }
         
         .xiu {
-            color: #F44336;
+            color: var(--error-color);
             text-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
         }
         
@@ -612,116 +674,28 @@
         }
         
         .check-btn {
-            background-color: #2196F3;
+            background-color: var(--info-color);
             color: white;
         }
         
         .history-btn {
-            background-color: #673AB7;
+            background-color: var(--secondary-color);
             color: white;
         }
         
         .new-game-btn {
-            background-color: #FF9800;
-            color: black;
+            background-color: var(--warning-color);
+            color: white;
         }
         
         .back-btn {
             background-color: #9E9E9E;
-            color: black;
+            color: white;
         }
         
         .action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .history-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .history-content {
-            background-color: var(--darker-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 1000px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            animation: modalFadeIn 0.3s ease-in-out;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .history-title {
-            font-size: 24px;
-            color: var(--primary-color);
-            text-align: center;
-            width: 100%;
-        }
-        
-        .close-history {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-        
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .history-table th, .history-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .history-table th {
-            background-color: rgba(156, 39, 176, 0.1);
-            color: var(--primary-color);
-            position: sticky;
-            top: 0;
-        }
-        
-        .history-table tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        .correct {
-            color: #4CAF50;
-        }
-        
-        .incorrect {
-            color: #F44336;
         }
         
         /* Bot Container */
@@ -753,7 +727,7 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            color: #fff;
+            color: white;
             overflow: hidden;
         }
         
@@ -771,7 +745,7 @@
         .bot-status {
             margin-left: auto;
             font-size: 12px;
-            color: #9c27b0;
+            color: var(--primary-color);
             display: flex;
             align-items: center;
         }
@@ -782,7 +756,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #9c27b0;
+            background-color: var(--primary-color);
             margin-right: 5px;
             animation: pulse 1.5s infinite;
         }
@@ -903,7 +877,7 @@
         
         .send-btn {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 12px 20px;
             border-radius: 8px;
@@ -976,7 +950,7 @@
         
         .notification-btn {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 8px 15px;
             border-radius: 5px;
@@ -1039,7 +1013,7 @@
         
         .copy-btn {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 5px 10px;
             border-radius: 3px;
@@ -1056,13 +1030,102 @@
         
         .close-payment {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             margin-top: 20px;
+        }
+        
+        /* History Modal */
+        .history-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .history-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .history-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .close-history {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-table th {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--primary-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        .history-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .correct {
+            color: var(--success-color);
+        }
+        
+        .incorrect {
+            color: var(--error-color);
         }
         
         /* Music Player */
@@ -1084,7 +1147,7 @@
         
         .music-control {
             background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -1109,7 +1172,7 @@
         
         .music-title {
             font-size: 14px;
-            font-weight: bold;
+            color: var(--primary-color);
         }
         
         .music-artist {
@@ -1117,49 +1180,132 @@
             color: rgba(255, 255, 255, 0.7);
         }
         
-        /* Cursor Effects */
-        .cursor-effect {
+        /* Profile Modal */
+        .profile-modal {
+            display: none;
             position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: rgba(156, 39, 176, 0.5);
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            mix-blend-mode: screen;
-            animation: cursorPulse 1.5s infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .profile-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .profile-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .close-profile {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .profile-value {
+            color: var(--text-color);
+        }
+        
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .profile-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .profile-edit {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .profile-save {
+            background-color: var(--success-color);
+            color: white;
             display: none;
         }
         
-        @keyframes cursorPulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.5; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .profile-cancel {
+            background-color: var(--error-color);
+            color: white;
+            display: none;
         }
         
-        /* Copyright */
-        .copyright {
+        /* Lucky Draw */
+        .lucky-draw {
+            display: none;
             text-align: center;
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
         }
         
-        /* Timer */
-        .timer {
-            background-color: var(--darker-bg);
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            border: 1px solid var(--primary-color);
-            margin-left: 15px;
+        .draw-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
         }
         
-        /* Profile Page */
-        .profile-container {
+        .draw-container {
             background-color: var(--panel-bg);
             backdrop-filter: blur(10px);
             border-radius: 15px;
@@ -1167,207 +1313,127 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
         }
         
-        .profile-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .profile-header {
-            display: flex;
-            align-items: center;
+        .draw-wheel {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
             margin-bottom: 30px;
         }
         
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
+        .wheel {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background-color: var(--primary-color);
-            margin-right: 20px;
+            background: conic-gradient(
+                var(--primary-color) 0% 10%,
+                var(--secondary-color) 10% 20%,
+                var(--accent-color) 20% 30%,
+                var(--success-color) 30% 40%,
+                var(--info-color) 40% 50%,
+                var(--warning-color) 50% 60%,
+                var(--error-color) 60% 70%,
+                #9C27B0 70% 80%,
+                #673AB7 80% 90%,
+                #3F51B5 90% 100%
+            );
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background-color: var(--darker-bg);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
+            color: var(--primary-color);
             font-weight: bold;
-            color: #fff;
-            font-size: 36px;
-            position: relative;
-            overflow: hidden;
         }
         
-        .profile-avatar::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: rotate(45deg) translateX(-100%); }
-            100% { transform: rotate(45deg) translateX(100%); }
-        }
-        
-        .profile-info {
-            flex: 1;
-        }
-        
-        .profile-name {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .profile-role {
-            font-size: 14px;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .profile-stats {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .stat-item {
-            background-color: var(--darker-bg);
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .stat-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .profile-content {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .profile-sidebar {
-            width: 250px;
-            flex-shrink: 0;
-        }
-        
-        .profile-menu {
-            list-style: none;
-            background-color: var(--darker-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .profile-menu li {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .profile-menu li:last-child {
-            border-bottom: none;
-        }
-        
-        .profile-menu a {
-            display: block;
-            padding: 15px;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .profile-menu a:hover {
-            background-color: rgba(156, 39, 176, 0.1);
-            color: var(--primary-color);
-        }
-        
-        .profile-menu a.active {
+        .draw-btn {
             background-color: var(--primary-color);
-            color: #fff;
-        }
-        
-        .profile-main {
-            flex: 1;
-        }
-        
-        .profile-section {
-            background-color: var(--darker-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--dark-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            color: var(--text-color);
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
-        }
-        
-        .save-btn {
-            background-color: var(--primary-color);
-            color: #fff;
+            color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 15px 30px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            margin-top: 20px;
         }
         
-        .history-chart {
-            height: 200px;
-            background-color: var(--dark-bg);
-            border-radius: 5px;
-            margin-top: 15px;
-            position: relative;
-            overflow: hidden;
+        .draw-btn:hover {
+            background-color: #8e24aa;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
         }
         
-        .chart-bar {
+        .draw-result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--darker-bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .draw-result-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .draw-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--success-color);
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+            margin: 10px 0;
+        }
+        
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .particle {
             position: absolute;
-            bottom: 0;
-            width: 10px;
             background-color: var(--primary-color);
-            border-radius: 3px 3px 0 0;
-            transition: height 0.5s ease;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
         }
         
         /* Responsive */
@@ -1376,9 +1442,14 @@
                 padding: 30px 20px;
             }
             
+            .app-container {
+                padding: 10px;
+            }
+            
             .header {
                 flex-direction: column;
                 gap: 15px;
+                padding-bottom: 15px;
             }
             
             .user-info {
@@ -1386,391 +1457,385 @@
                 justify-content: center;
             }
             
-            .menu-toggle {
-                display: block;
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                z-index: 100;
-            }
-            
-            .sidebar {
-                width: 80%;
-                left: -80%;
-            }
-            
             .tool-selector {
                 flex-direction: column;
-                align-items: center;
+                gap: 10px;
             }
             
             .tool-btn {
                 width: 100%;
             }
             
-            .profile-content {
-                flex-direction: column;
-            }
-            
-            .profile-sidebar {
-                width: 100%;
-            }
-            
-            .profile-stats {
-                flex-wrap: wrap;
-                justify-content: center;
+            .bot-messages {
+                height: 300px;
             }
             
             .music-player {
                 bottom: 10px;
                 left: 10px;
                 right: 10px;
-                width: auto;
+                justify-content: center;
             }
+            
+            .draw-wheel {
+                width: 250px;
+                height: 250px;
+            }
+        }
+        
+        /* Animation for buttons */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--primary-color); }
+            50% { box-shadow: 0 0 20px var(--primary-color); }
+            100% { box-shadow: 0 0 5px var(--primary-color); }
+        }
+        
+        .glowing {
+            animation: glow 2s infinite;
+        }
+        
+        /* Animation for text */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end);
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            margin-top: 30px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .admin-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            background-color: var(--darker-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+        
+        .admin-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .admin-btn:hover {
+            background-color: #8e24aa;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .users-table th, .users-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .users-table th {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .users-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 <body>
-    <div class="cursor-effect"></div>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
     
     <!-- Login Page -->
     <div class="login-container" id="loginPage">
         <div class="login-box">
             <h1 class="login-title">BEVIS TOOL TX</h1>
-            <div id="loginForm">
-                <input type="text" class="login-input" id="username" placeholder="Tên đăng nhập">
-                <input type="password" class="login-input" id="password" placeholder="Mật khẩu">
-                <button class="login-btn" id="loginBtn">Đăng nhập</button>
-                <div class="register-link">
-                    Chưa có tài khoản? <a href="#" id="showRegister">Đăng ký</a>
+            <input type="text" class="login-input" id="loginUsername" placeholder="Tên đăng nhập">
+            <input type="password" class="login-input" id="loginPassword" placeholder="Mật khẩu">
+            <button class="login-btn" id="loginBtn">ĐĂNG NHẬP</button>
+            
+            <div class="register-link">
+                Chưa có tài khoản? <a href="#" id="registerLink">Đăng ký ngay</a>
+            </div>
+            
+            <div class="google-login">
+                <div id="g_id_onload"
+                    data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="handleGoogleSignIn"
+                    data-auto_prompt="false">
                 </div>
-                <div class="register-link">
-                    Hoặc <a href="#" id="googleLogin">Đăng nhập với Google</a>
+                <div class="g_id_signin"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="filled_blue"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="left">
                 </div>
             </div>
-            <div id="registerForm" style="display: none;">
-                <input type="text" class="login-input" id="regUsername" placeholder="Tên đăng nhập">
-                <input type="password" class="login-input" id="regPassword" placeholder="Mật khẩu">
-                <input type="password" class="login-input" id="regConfirmPassword" placeholder="Xác nhận mật khẩu">
-                <button class="login-btn" id="registerBtn">Đăng ký</button>
-                <div class="register-link">
-                    Đã có tài khoản? <a href="#" id="showLogin">Đăng nhập</a>
-                </div>
+            
+            <div class="mission-container" id="missionContainer">
+                <p class="mission-text">Hoàn thành nhiệm vụ để nhận tài khoản Premium</p>
+                <button class="mission-btn" id="missionBtn">HOÀN THÀNH NHIỆM VỤ</button>
+                <button class="check-btn" id="checkBtn">KIỂM TRA</button>
             </div>
+        </div>
+    </div>
+    
+    <!-- Register Modal -->
+    <div class="register-modal" id="registerModal">
+        <div class="register-content">
+            <h2 class="register-title">ĐĂNG KÝ TÀI KHOẢN</h2>
+            <input type="text" class="login-input" id="regUsername" placeholder="Tên đăng nhập">
+            <input type="password" class="login-input" id="regPassword" placeholder="Mật khẩu">
+            <input type="password" class="login-input" id="regConfirmPassword" placeholder="Xác nhận mật khẩu">
+            <button class="login-btn" id="registerBtn">ĐĂNG KÝ</button>
+            <button class="close-register" id="closeRegister">ĐÓNG</button>
         </div>
     </div>
     
     <!-- Main App -->
     <div class="app-container" id="appContainer">
-        <button class="menu-toggle" id="menuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">Menu</h2>
-                <button class="close-sidebar" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="#" class="active" data-tool="home">Trang chủ</a></li>
-                <li><a href="#" data-tool="toolv4">Tool V4</a></li>
-                <li><a href="#" data-tool="toolv5">Tool V5</a></li>
-                <li><a href="#" data-tool="profile">Hồ sơ</a></li>
-                <li class="admin-only"><a href="#" data-tool="admin">Quản trị viên</a></li>
-                <li><a href="#" id="paymentBtn">Nạp tiền</a></li>
-                <li><a href="#" id="logoutBtn">Đăng xuất</a></li>
-            </ul>
-        </div>
-        
         <div class="header">
             <a href="#" class="logo">
                 <i class="fas fa-dice"></i> BEVIS TOOL TX
             </a>
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="user-balance" id="userBalance">10.000.000 VND</div>
-                <div class="timer" id="toolTimer">00:00:00</div>
-                <button class="logout-btn" id="logoutBtnMain">Đăng xuất</button>
-            </div>
-        </div>
-        
-        <div class="tool-selector">
-            <button class="tool-btn active" data-tool="home">Trang chủ</button>
-            <button class="tool-btn" data-tool="toolv4">Tool V4</button>
-            <button class="tool-btn" data-tool="toolv5">Tool V5</button>
-            <button class="tool-btn" data-tool="profile">Hồ sơ</button>
-            <button class="tool-btn admin-only" data-tool="admin">Quản trị viên</button>
-        </div>
-        
-        <!-- Home Tool -->
-        <div class="tool-container active" id="homeTool">
-            <h2 class="tool-title">Chào mừng đến với BEVIS TOOL TX</h2>
-            <p style="text-align: center; margin-bottom: 20px;">Công cụ hỗ trợ phân tích xác suất Tài Xỉu chính xác nhất</p>
             
-            <div class="bot-container">
-                <div class="bot-header">
-                    <div class="bot-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="bot-name">Bevis Bot</div>
-                    <div class="bot-status">Đang hoạt động</div>
-                </div>
-                <div class="bot-messages" id="botMessages">
-                    <div class="message">
-                        <div class="bot-message">
-                            Xin chào! Tôi là Bevis Bot, trợ lý ảo của bạn. Tôi có thể giúp bạn phân tích xác suất Tài Xỉu với độ chính xác cao.
-                            <div class="message-time">10:00</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="bot-message">
-                            Hãy chọn một công cụ từ menu để bắt đầu phân tích. Mỗi công cụ sẽ có hướng dẫn cụ thể.
-                            <div class="message-time">10:01</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="message-input-container">
-                    <input type="text" class="message-input" id="userMessage" placeholder="Nhập tin nhắn...">
-                    <button class="send-btn" id="sendMessage">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="user-info">
+                <div class="user-balance" id="userBalance">10,000 coin</div>
+                <div class="user-avatar" id="userAvatar">LD</div>
+                <button class="logout-btn" id="logoutBtn">ĐĂNG XUẤT</button>
             </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">MENU</h2>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-tool="toolv4">Tool V4</a></li>
+                <li><a href="#" data-tool="toolv5">Tool V5</a></li>
+                <li><a href="#" data-tool="luckyDraw">Rút thăm may mắn</a></li>
+                <li><a href="#" id="profileBtn">Hồ sơ cá nhân</a></li>
+                <li><a href="#" id="paymentBtn">Nạp tiền</a></li>
+                <li class="admin-only"><a href="#" id="adminBtn">Admin Panel</a></li>
+            </ul>
+        </div>
+        
+        <!-- Tool Selector -->
+        <div class="tool-selector">
+            <button class="tool-btn active" data-tool="toolv4">Tool V4</button>
+            <button class="tool-btn" data-tool="toolv5">Tool V5</button>
+            <button class="tool-btn" data-tool="luckyDraw">Rút thăm may mắn</button>
         </div>
         
         <!-- Tool V4 -->
-        <div class="tool-container" id="toolV4">
-            <h2 class="tool-title">Công Cụ V4 - Phân Tích Xác Suất</h2>
+        <div class="tool-container active" id="toolv4">
+            <h2 class="tool-title">TOOL V4 - PHÂN TÍCH XÁC SUẤT</h2>
+            
             <div class="input-group">
-                <label for="diceInput">Nhập 3 xí ngầu vừa ra (cách nhau bằng khoảng trắng):</label>
+                <label for="diceInput">Nhập 3 xí ngầu (cách nhau bằng khoảng trắng):</label>
                 <input type="text" id="diceInput" placeholder="Ví dụ: 1 4 6">
             </div>
-            <button class="submit-btn" id="analyzeV4">Phân Tích</button>
             
-            <div class="result-container" id="resultV4">
-                <h3 class="result-title">Kết Quả Phân Tích</h3>
-                <div class="prediction" id="predictionV4"></div>
-                <div class="dice-probability" id="probabilityV4"></div>
+            <button class="submit-btn" id="analyzeBtn">PHÂN TÍCH</button>
+            
+            <div class="result-container" id="v4Result">
+                <h3 class="result-title">KẾT QUẢ PHÂN TÍCH</h3>
+                <div class="prediction" id="v4Prediction"></div>
+                <div class="dice-probability" id="v4Probability"></div>
             </div>
         </div>
         
         <!-- Tool V5 -->
-        <div class="tool-container" id="toolV5">
-            <h2 class="tool-title">Công Cụ V5 - Dự Đoán Xác Suất</h2>
+        <div class="tool-container" id="toolv5">
+            <h2 class="tool-title">TOOL V5 - DỰ ĐOÁN XÍ NGẦU</h2>
+            
             <div class="input-group">
-                <label for="diceInputV5">Nhập 3 xí ngầu vừa ra (cách nhau bằng khoảng trắng):</label>
+                <label for="diceInputV5">Nhập 3 xí ngầu (cách nhau bằng khoảng trắng):</label>
                 <input type="text" id="diceInputV5" placeholder="Ví dụ: 1 4 6">
             </div>
-            <button class="submit-btn" id="analyzeV5">Dự Đoán</button>
             
-            <div class="result-container" id="resultV5">
-                <h3 class="result-title">Kết Quả Dự Đoán</h3>
-                <div class="prediction" id="predictionV5"></div>
-                <div class="dice-probability" id="probabilityV5"></div>
+            <button class="submit-btn" id="predictBtn">DỰ ĐOÁN</button>
+            
+            <div class="result-container" id="v5Result">
+                <h3 class="result-title">KẾT QUẢ DỰ ĐOÁN</h3>
+                <div class="prediction" id="v5Prediction"></div>
+                <div class="dice-probability" id="v5Probability"></div>
             </div>
         </div>
         
-        <!-- Profile Tool -->
-        <div class="tool-container" id="profileTool">
-            <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">U</div>
-                <div class="profile-info">
-                    <h2 class="profile-name" id="profileName">Username</h2>
-                    <div class="profile-role" id="profileRole">Người dùng</div>
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="statBalance">10.000.000</div>
-                            <div class="stat-label">Số dư (VND)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="statTools">3</div>
-                            <div class="stat-label">Tool đã dùng</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="statWinRate">75%</div>
-                            <div class="stat-label">Tỉ lệ thắng</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Lucky Draw -->
+        <div class="lucky-draw" id="luckyDraw">
+            <h2 class="draw-title">RÚT THĂM MAY MẮN</h2>
             
-            <div class="profile-content">
-                <div class="profile-sidebar">
-                    <ul class="profile-menu">
-                        <li><a href="#" class="active" data-tab="info">Thông tin cá nhân</a></li>
-                        <li><a href="#" data-tab="history">Lịch sử giao dịch</a></li>
-                        <li><a href="#" data-tab="stats">Thống kê</a></li>
-                        <li><a href="#" data-tab="settings">Cài đặt</a></li>
-                    </ul>
+            <div class="draw-container">
+                <p>Bạn có cơ hội nhận từ 1.000 đến 30.000 coin mỗi ngày!</p>
+                
+                <div class="draw-wheel">
+                    <div class="wheel" id="wheel"></div>
+                    <div class="wheel-center">
+                        <i class="fas fa-gift"></i>
+                    </div>
                 </div>
                 
-                <div class="profile-main">
-                    <div class="profile-section" id="infoTab">
-                        <h3 class="section-title">Thông tin cá nhân</h3>
-                        <div class="form-group">
-                            <label class="form-label">Tên đăng nhập</label>
-                            <input type="text" class="form-control" value="username" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" value="user@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-control" value="0123456789">
-                        </div>
-                        <button class="save-btn">Lưu thay đổi</button>
-                    </div>
-                    
-                    <div class="profile-section" id="historyTab" style="display: none;">
-                        <h3 class="section-title">Lịch sử giao dịch</h3>
-                        <table class="history-table">
-                            <thead>
-                                <tr>
-                                    <th>Thời gian</th>
-                                    <th>Loại</th>
-                                    <th>Số tiền</th>
-                                    <th>Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>01/08/2023 10:30</td>
-                                    <td>Nạp tiền</td>
-                                    <td>500.000 VND</td>
-                                    <td>Thành công</td>
-                                </tr>
-                                <tr>
-                                    <td>02/08/2023 15:45</td>
-                                    <td>Mua tool</td>
-                                    <td>10.000 VND</td>
-                                    <td>Thành công</td>
-                                </tr>
-                                <tr>
-                                    <td>03/08/2023 09:12</td>
-                                    <td>Mua tool</td>
-                                    <td>10.000 VND</td>
-                                    <td>Thành công</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="profile-section" id="statsTab" style="display: none;">
-                        <h3 class="section-title">Thống kê sử dụng</h3>
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <div class="stat-value">15</div>
-                                <div class="stat-label">Lần sử dụng Tool V4</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">12</div>
-                                <div class="stat-label">Lần sử dụng Tool V5</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">75%</div>
-                                <div class="stat-label">Độ chính xác</div>
-                            </div>
-                        </div>
-                        <div class="history-chart" id="historyChart"></div>
-                    </div>
-                    
-                    <div class="profile-section" id="settingsTab" style="display: none;">
-                        <h3 class="section-title">Cài đặt tài khoản</h3>
-                        <div class="form-group">
-                            <label class="form-label">Thay đổi mật khẩu</label>
-                            <input type="password" class="form-control" placeholder="Mật khẩu hiện tại">
-                            <input type="password" class="form-control" placeholder="Mật khẩu mới" style="margin-top: 10px;">
-                            <input type="password" class="form-control" placeholder="Xác nhận mật khẩu mới" style="margin-top: 10px;">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Cài đặt thông báo</label>
-                            <div>
-                                <input type="checkbox" id="notif1" checked>
-                                <label for="notif1">Thông báo khi tool hết hạn</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="notif2" checked>
-                                <label for="notif2">Thông báo khuyến mãi</label>
-                            </div>
-                        </div>
-                        <button class="save-btn">Lưu cài đặt</button>
+                <button class="draw-btn" id="drawBtn">RÚT THĂM</button>
+            </div>
+            
+            <div class="draw-result" id="drawResult">
+                <h3 class="draw-result-title">CHÚC MỪNG!</h3>
+                <p>Bạn đã nhận được:</p>
+                <div class="draw-amount" id="drawAmount">10,000 coin</div>
+                <p>Coin sẽ được cộng vào tài khoản của bạn trong vòng 24h.</p>
+            </div>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <h2 class="admin-title">ADMIN PANEL</h2>
+            
+            <div class="admin-controls">
+                <input type="text" class="admin-input" id="adminUsername" placeholder="Tên người dùng">
+                <input type="number" class="admin-input" id="adminAmount" placeholder="Số coin">
+                <button class="admin-btn" id="addCoinBtn">THÊM COIN</button>
+            </div>
+            
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên người dùng</th>
+                        <th>Email</th>
+                        <th>Số dư</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td>1</td>
+                        <td>leduc</td>
+                        <td>admin@bevis.com</td>
+                        <td>1,000,000</td>
+                        <td>
+                            <button class="admin-btn">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>user1</td>
+                        <td>user1@example.com</td>
+                        <td>50,000</td>
+                        <td>
+                            <button class="admin-btn">Chỉnh sửa</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Bot Chat Container -->
+        <div class="bot-container">
+            <div class="bot-header">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-name">Bevis Bot</div>
+                <div class="bot-status">Đang hoạt động</div>
+            </div>
+            
+            <div class="bot-messages" id="botMessages">
+                <div class="message">
+                    <div class="bot-message">
+                        Xin chào! Tôi là Bevis Bot, trợ lý ảo của bạn. Tôi có thể giúp gì cho bạn?
+                        <div class="message-time">10:30 AM</div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Admin Tool -->
-        <div class="tool-container" id="adminTool">
-            <h2 class="tool-title">Công Cụ Quản Trị Viên</h2>
             
-            <div class="input-group">
-                <label for="adminUsername">Tên người dùng:</label>
-                <input type="text" id="adminUsername" placeholder="Nhập tên người dùng">
-            </div>
-            
-            <div class="input-group">
-                <label for="adminAmount">Số tiền (VND):</label>
-                <input type="number" id="adminAmount" placeholder="Nhập số tiền">
-            </div>
-            
-            <button class="submit-btn" id="addMoneyBtn">Thêm Tiền</button>
-            
-            <div class="result-container" id="adminResult" style="display: none;">
-                <h3 class="result-title">Kết Quả</h3>
-                <div id="adminMessage"></div>
-            </div>
-            
-            <div class="input-group" style="margin-top: 30px;">
-                <h3 class="section-title">Danh sách người dùng</h3>
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Tên đăng nhập</th>
-                            <th>Số dư (VND)</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userList">
-                        <tr>
-                            <td>user1</td>
-                            <td>500.000</td>
-                            <td>Hoạt động</td>
-                            <td><button class="copy-btn">Sửa</button></td>
-                        </tr>
-                        <tr>
-                            <td>user2</td>
-                            <td>1.200.000</td>
-                            <td>Hoạt động</td>
-                            <td><button class="copy-btn">Sửa</button></td>
-                        </tr>
-                        <tr>
-                            <td>user3</td>
-                            <td>0</td>
-                            <td>Khóa</td>
-                            <td><button class="copy-btn">Sửa</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="message-input-container">
+                <input type="text" class="message-input" id="messageInput" placeholder="Nhập tin nhắn của bạn...">
+                <button class="send-btn" id="sendMessageBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
-        
-        <div class="copyright">
-            &copy; 2023 BEVIS TOOL TX - All rights reserved
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-header">
+            <h3 class="notification-title" id="notificationTitle">THÔNG BÁO</h3>
+            <button class="close-notification" id="closeNotification">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-content" id="notificationContent">
+            Nội dung thông báo
+        </div>
+        <div class="notification-footer">
+            <button class="notification-btn" id="notificationConfirm">XÁC NHẬN</button>
+            <button class="notification-btn" id="notificationCancel">HỦY</button>
         </div>
     </div>
     
     <!-- Payment Modal -->
     <div class="payment-modal" id="paymentModal">
         <div class="payment-content">
-            <h2 class="payment-title">Nạp Tiền Vào Tài Khoản</h2>
+            <h2 class="payment-title">NẠP TIỀN</h2>
+            
             <div class="payment-info">
                 <div class="payment-item">
                     <span>Số tài khoản:</span>
-                    <span>1234567890 <button class="copy-btn" data-text="1234567890">Sao chép</button></span>
+                    <span>1234567890 <button class="copy-btn">Sao chép</button></span>
                 </div>
                 <div class="payment-item">
                     <span>Chủ tài khoản:</span>
@@ -1782,597 +1847,677 @@
                 </div>
                 <div class="payment-item">
                     <span>Nội dung chuyển khoản:</span>
-                    <span>NAP username <button class="copy-btn" data-text="NAP username">Sao chép</button></span>
+                    <span>NAPTIEN [Tên đăng nhập]</span>
                 </div>
             </div>
-            <div class="payment-note">
-                <p><strong>Lưu ý:</strong> Sau khi chuyển khoản, tiền sẽ được cộng vào tài khoản của bạn trong vòng 5-10 phút.</p>
-                <p>Nếu có bất kỳ vấn đề gì, vui lòng liên hệ với hỗ trợ viên qua Zalo: 0123456789</p>
-            </div>
-            <button class="close-payment" id="closePayment">Đóng</button>
+            
+            <p class="payment-note">
+                <strong>Lưu ý:</strong> Sau khi chuyển khoản, vui lòng chờ hệ thống xác nhận trong vòng 5-10 phút.
+                Nếu có bất kỳ vấn đề gì, vui lòng liên hệ với hỗ trợ viên.
+            </p>
+            
+            <button class="close-payment" id="closePayment">ĐÓNG</button>
         </div>
     </div>
     
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <div class="notification-header">
-            <h3 class="notification-title" id="notificationTitle">Thông báo</h3>
-            <button class="close-notification" id="closeNotification">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="notification-content" id="notificationContent">
-            Nội dung thông báo
-        </div>
-        <div class="notification-footer">
-            <button class="notification-btn" id="notificationOk">OK</button>
-            <button class="notification-btn" id="notificationCancel">Hủy</button>
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <h2 class="profile-title">HỒ SƠ CÁ NHÂN</h2>
+                <button class="close-profile" id="closeProfile">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-item">
+                    <span class="profile-label">Tên đăng nhập:</span>
+                    <span class="profile-value" id="profileUsername">user123</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Email:</span>
+                    <span class="profile-value" id="profileEmail">user@example.com</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Số dư:</span>
+                    <span class="profile-value" id="profileBalance">10,000 coin</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Ngày tham gia:</span>
+                    <span class="profile-value" id="profileJoinDate">01/01/2023</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="profile-btn profile-edit" id="profileEditBtn">CHỈNH SỬA</button>
+                <button class="profile-btn profile-save" id="profileSaveBtn">LƯU</button>
+                <button class="profile-btn profile-cancel" id="profileCancelBtn">HỦY</button>
+            </div>
         </div>
     </div>
     
     <!-- Music Player -->
     <div class="music-player">
-        <div class="music-control" id="playPause">
+        <div class="music-control" id="playPauseBtn">
             <i class="fas fa-play"></i>
         </div>
         <div class="music-info">
-            <div class="music-title">Nhạc nền BEVIS</div>
-            <div class="music-artist">Sound Effect</div>
+            <div class="music-title">Bevis Theme</div>
+            <div class="music-artist">Bevis Team</div>
         </div>
     </div>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const loginPage = document.getElementById('loginPage');
-            const appContainer = document.getElementById('appContainer');
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const showRegister = document.getElementById('showRegister');
-            const showLogin = document.getElementById('showLogin');
-            const loginBtn = document.getElementById('loginBtn');
-            const registerBtn = document.getElementById('registerBtn');
-            const googleLogin = document.getElementById('googleLogin');
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const toolBtns = document.querySelectorAll('.tool-btn');
-            const toolContainers = document.querySelectorAll('.tool-container');
-            const analyzeV4 = document.getElementById('analyzeV4');
-            const analyzeV5 = document.getElementById('analyzeV5');
-            const resultV4 = document.getElementById('resultV4');
-            const resultV5 = document.getElementById('resultV5');
-            const paymentBtn = document.getElementById('paymentBtn');
-            const paymentModal = document.getElementById('paymentModal');
-            const closePayment = document.getElementById('closePayment');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const logoutBtnMain = document.getElementById('logoutBtnMain');
-            const notification = document.getElementById('notification');
-            const closeNotification = document.getElementById('closeNotification');
-            const notificationOk = document.getElementById('notificationOk');
-            const notificationCancel = document.getElementById('notificationCancel');
-            const playPause = document.getElementById('playPause');
-            const cursorEffect = document.querySelector('.cursor-effect');
-            const addMoneyBtn = document.getElementById('addMoneyBtn');
-            const adminResult = document.getElementById('adminResult');
-            const profileMenu = document.querySelectorAll('.profile-menu a');
-            const profileTabs = document.querySelectorAll('.profile-section');
-            
-            // Sound Effects
-            const clickSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
-            const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
-            const errorSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3');
-            
-            // App State
-            let currentUser = null;
-            let isPlaying = false;
-            let toolTimer = null;
-            let toolEndTime = null;
-            
-            // Initialize
-            init();
-            
-            function init() {
-                // Check if user is logged in
-                const savedUser = localStorage.getItem('currentUser');
-                if (savedUser) {
-                    currentUser = JSON.parse(savedUser);
-                    showApp();
-                }
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const appContainer = document.getElementById('appContainer');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerLink = document.getElementById('registerLink');
+        const registerModal = document.getElementById('registerModal');
+        const closeRegister = document.getElementById('closeRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const missionContainer = document.getElementById('missionContainer');
+        const missionBtn = document.getElementById('missionBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const toolBtns = document.querySelectorAll('.tool-btn');
+        const toolContainers = document.querySelectorAll('.tool-container');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const predictBtn = document.getElementById('predictBtn');
+        const v4Result = document.getElementById('v4Result');
+        const v5Result = document.getElementById('v5Result');
+        const v4Prediction = document.getElementById('v4Prediction');
+        const v5Prediction = document.getElementById('v5Prediction');
+        const v4Probability = document.getElementById('v4Probability');
+        const v5Probability = document.getElementById('v5Probability');
+        const notification = document.getElementById('notification');
+        const closeNotification = document.getElementById('closeNotification');
+        const notificationConfirm = document.getElementById('notificationConfirm');
+        const notificationCancel = document.getElementById('notificationCancel');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationContent = document.getElementById('notificationContent');
+        const paymentBtn = document.getElementById('paymentBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const closePayment = document.getElementById('closePayment');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileModal = document.getElementById('profileModal');
+        const closeProfile = document.getElementById('closeProfile');
+        const profileEditBtn = document.getElementById('profileEditBtn');
+        const profileSaveBtn = document.getElementById('profileSaveBtn');
+        const profileCancelBtn = document.getElementById('profileCancelBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const drawResult = document.getElementById('drawResult');
+        const drawAmount = document.getElementById('drawAmount');
+        const wheel = document.getElementById('wheel');
+        const botMessages = document.getElementById('botMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const adminPanel = document.getElementById('adminPanel');
+        const addCoinBtn = document.getElementById('addCoinBtn');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const userBalance = document.getElementById('userBalance');
+        const userAvatar = document.getElementById('userAvatar');
+        
+        // App State
+        let currentUser = null;
+        let isPlaying = false;
+        let audioContext = null;
+        let currentToolCost = 10000;
+        let userData = {
+            'leduc': { password: 'bevis', balance: 1000000, isAdmin: true },
+            'user1': { password: 'password1', balance: 50000, isAdmin: false }
+        };
+        
+        // Initialize particles
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
                 
-                // Set up event listeners
-                setupEventListeners();
+                const size = Math.random() * 10 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
                 
-                // Initialize history chart
-                initHistoryChart();
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Play click sound
+        function playClickSound() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
             
-            function setupEventListeners() {
-                // Login/Register events
-                showRegister.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    loginForm.style.display = 'none';
-                    registerForm.style.display = 'block';
-                    playSound(clickSound);
-                });
-                
-                showLogin.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    registerForm.style.display = 'none';
-                    loginForm.style.display = 'block';
-                    playSound(clickSound);
-                });
-                
-                loginBtn.addEventListener('click', function() {
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-                    
-                    if (username === 'leduc' && password === 'bevis') {
-                        currentUser = {
-                            username: 'leduc',
-                            role: 'admin',
-                            balance: 10000000
-                        };
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        showApp();
-                        playSound(successSound);
-                    } else if (username && password) {
-                        currentUser = {
-                            username: username,
-                            role: 'user',
-                            balance: 0
-                        };
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        showApp();
-                        playSound(successSound);
-                    } else {
-                        showNotification('Lỗi', 'Vui lòng nhập tên đăng nhập và mật khẩu');
-                        playSound(errorSound);
-                    }
-                });
-                
-                registerBtn.addEventListener('click', function() {
-                    const username = document.getElementById('regUsername').value;
-                    const password = document.getElementById('regPassword').value;
-                    const confirmPassword = document.getElementById('regConfirmPassword').value;
-                    
-                    if (!username || !password || !confirmPassword) {
-                        showNotification('Lỗi', 'Vui lòng điền đầy đủ thông tin');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    if (password !== confirmPassword) {
-                        showNotification('Lỗi', 'Mật khẩu xác nhận không khớp');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    currentUser = {
-                        username: username,
-                        role: 'user',
-                        balance: 0
-                    };
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    showApp();
-                    showNotification('Thành công', 'Đăng ký tài khoản thành công!');
-                    playSound(successSound);
-                });
-                
-                googleLogin.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showNotification('Thông báo', 'Tính năng đăng nhập bằng Google sẽ sớm được cập nhật');
-                    playSound(clickSound);
-                });
-                
-                // Menu events
-                menuToggle.addEventListener('click', function() {
-                    sidebar.classList.add('open');
-                    playSound(clickSound);
-                });
-                
-                closeSidebar.addEventListener('click', function() {
-                    sidebar.classList.remove('open');
-                    playSound(clickSound);
-                });
-                
-                // Tool selection events
-                toolBtns.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const tool = this.getAttribute('data-tool');
-                        
-                        toolBtns.forEach(b => b.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        toolContainers.forEach(container => {
-                            container.classList.remove('active');
-                        });
-                        
-                        document.getElementById(tool + 'Tool').classList.add('active');
-                        
-                        playSound(clickSound);
-                    });
-                });
-                
-                // Tool V4 analysis
-                analyzeV4.addEventListener('click', function() {
-                    const diceInput = document.getElementById('diceInput').value;
-                    const diceValues = diceInput.trim().split(' ').map(Number);
-                    
-                    if (diceValues.length !== 3 || diceValues.some(isNaN)) {
-                        showNotification('Lỗi', 'Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    // Check if user has enough balance
-                    if (currentUser.balance < 10000) {
-                        showNotification('Lỗi', 'Bạn không đủ tiền để sử dụng công cụ này');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    // Deduct balance
-                    currentUser.balance -= 10000;
-                    updateBalance();
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    // Start timer
-                    startToolTimer();
-                    
-                    // Analyze dice
-                    const analysis = analyzeDiceV4(diceValues);
-                    
-                    // Display results
-                    document.getElementById('predictionV4').innerHTML = analysis.prediction;
-                    document.getElementById('probabilityV4').innerHTML = analysis.probability;
-                    resultV4.style.display = 'block';
-                    
-                    playSound(successSound);
-                });
-                
-                // Tool V5 analysis
-                analyzeV5.addEventListener('click', function() {
-                    const diceInput = document.getElementById('diceInputV5').value;
-                    const diceValues = diceInput.trim().split(' ').map(Number);
-                    
-                    if (diceValues.length !== 3 || diceValues.some(isNaN)) {
-                        showNotification('Lỗi', 'Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    // Check if user has enough balance
-                    if (currentUser.balance < 10000) {
-                        showNotification('Lỗi', 'Bạn không đủ tiền để sử dụng công cụ này');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    // Deduct balance
-                    currentUser.balance -= 10000;
-                    updateBalance();
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    // Start timer
-                    startToolTimer();
-                    
-                    // Analyze dice
-                    const analysis = analyzeDiceV5(diceValues);
-                    
-                    // Display results
-                    document.getElementById('predictionV5').innerHTML = analysis.prediction;
-                    document.getElementById('probabilityV5').innerHTML = analysis.probability;
-                    resultV5.style.display = 'block';
-                    
-                    playSound(successSound);
-                });
-                
-                // Payment events
-                paymentBtn.addEventListener('click', function() {
-                    paymentModal.style.display = 'flex';
-                    playSound(clickSound);
-                });
-                
-                closePayment.addEventListener('click', function() {
-                    paymentModal.style.display = 'none';
-                    playSound(clickSound);
-                });
-                
-                // Logout events
-                logoutBtn.addEventListener('click', function() {
-                    logout();
-                    playSound(clickSound);
-                });
-                
-                logoutBtnMain.addEventListener('click', function() {
-                    logout();
-                    playSound(clickSound);
-                });
-                
-                // Notification events
-                closeNotification.addEventListener('click', function() {
-                    notification.style.display = 'none';
-                    playSound(clickSound);
-                });
-                
-                notificationOk.addEventListener('click', function() {
-                    notification.style.display = 'none';
-                    playSound(clickSound);
-                });
-                
-                notificationCancel.addEventListener('click', function() {
-                    notification.style.display = 'none';
-                    playSound(clickSound);
-                });
-                
-                // Music player events
-                playPause.addEventListener('click', function() {
-                    if (isPlaying) {
-                        playPause.innerHTML = '<i class="fas fa-play"></i>';
-                    } else {
-                        playPause.innerHTML = '<i class="fas fa-pause"></i>';
-                    }
-                    isPlaying = !isPlaying;
-                    playSound(clickSound);
-                });
-                
-                // Cursor effect
-                document.addEventListener('mousemove', function(e) {
-                    cursorEffect.style.display = 'block';
-                    cursorEffect.style.left = e.pageX + 'px';
-                    cursorEffect.style.top = e.pageY + 'px';
-                });
-                
-                document.addEventListener('click', function() {
-                    cursorEffect.style.animation = 'none';
-                    void cursorEffect.offsetWidth;
-                    cursorEffect.style.animation = 'cursorPulse 1.5s infinite';
-                });
-                
-                // Admin add money
-                addMoneyBtn.addEventListener('click', function() {
-                    if (currentUser.role !== 'admin') {
-                        showNotification('Lỗi', 'Bạn không có quyền thực hiện chức năng này');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    const username = document.getElementById('adminUsername').value;
-                    const amount = parseInt(document.getElementById('adminAmount').value);
-                    
-                    if (!username || !amount) {
-                        showNotification('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
-                        playSound(errorSound);
-                        return;
-                    }
-                    
-                    // In a real app, this would call an API to add money to the user's account
-                    document.getElementById('adminMessage').innerHTML = `Đã thêm ${amount.toLocaleString()} VND vào tài khoản ${username}`;
-                    adminResult.style.display = 'block';
-                    
-                    playSound(successSound);
-                });
-                
-                // Profile menu
-                profileMenu.forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const tab = this.getAttribute('data-tab');
-                        
-                        profileMenu.forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        profileTabs.forEach(t => t.style.display = 'none');
-                        document.getElementById(tab + 'Tab').style.display = 'block';
-                        
-                        playSound(clickSound);
-                    });
-                });
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 800;
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.1);
+            
+            setTimeout(() => {
+                oscillator.stop();
+            }, 100);
+        }
+        
+        // Show notification
+        function showNotification(title, content, confirmCallback = null, cancelCallback = null) {
+            notificationTitle.textContent = title;
+            notificationContent.textContent = content;
+            notification.style.display = 'block';
+            
+            if (confirmCallback) {
+                notificationConfirm.onclick = confirmCallback;
+                notificationConfirm.style.display = 'inline-block';
+            } else {
+                notificationConfirm.style.display = 'none';
             }
             
-            function showApp() {
-                loginPage.style.display = 'none';
-                appContainer.style.display = 'block';
-                
-                // Update user info
-                updateUserInfo();
-                
-                // Show admin features if user is admin
-                if (currentUser.role === 'admin') {
-                    document.querySelectorAll('.admin-only').forEach(el => {
-                        el.style.display = 'block';
-                    });
-                    document.body.classList.add('admin-mode');
-                }
+            if (cancelCallback) {
+                notificationCancel.onclick = cancelCallback;
+                notificationCancel.style.display = 'inline-block';
+            } else {
+                notificationCancel.style.display = 'none';
             }
-            
-            function updateUserInfo() {
-                document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
-                document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString() + ' VND';
-                
-                document.getElementById('profileAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
-                document.getElementById('profileName').textContent = currentUser.username;
-                document.getElementById('profileRole').textContent = currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng';
-                document.getElementById('statBalance').textContent = currentUser.balance.toLocaleString();
+        }
+        
+        // Hide notification
+        function hideNotification() {
+            notification.style.display = 'none';
+        }
+        
+        // Update user balance display
+        function updateBalanceDisplay() {
+            if (currentUser && userData[currentUser]) {
+                userBalance.textContent = `${userData[currentUser].balance.toLocaleString()} coin`;
             }
-            
-            function updateBalance() {
-                document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString() + ' VND';
-                document.getElementById('statBalance').textContent = currentUser.balance.toLocaleString();
+        }
+        
+        // Check if user can afford tool
+        function canAffordTool() {
+            if (!currentUser || !userData[currentUser]) return false;
+            return userData[currentUser].balance >= currentToolCost;
+        }
+        
+        // Deduct tool cost
+        function deductToolCost() {
+            if (currentUser && userData[currentUser]) {
+                userData[currentUser].balance -= currentToolCost;
+                updateBalanceDisplay();
+                
+                // Show notification about deduction
+                showNotification(
+                    'THÔNG BÁO', 
+                    `Bạn đã bị trừ ${currentToolCost.toLocaleString()} coin để sử dụng công cụ. Số dư còn lại: ${userData[currentUser].balance.toLocaleString()} coin.`
+                );
             }
+        }
+        
+        // Add message to chat
+        function addMessage(message, isUser = false) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
             
-            function logout() {
-                currentUser = null;
-                localStorage.removeItem('currentUser');
-                appContainer.style.display = 'none';
-                loginPage.style.display = 'flex';
-                
-                // Reset forms
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-                document.getElementById('regUsername').value = '';
-                document.getElementById('regPassword').value = '';
-                document.getElementById('regConfirmPassword').value = '';
-                registerForm.style.display = 'none';
-                loginForm.style.display = 'block';
-                
-                // Hide admin features
-                document.querySelectorAll('.admin-only').forEach(el => {
-                    el.style.display = 'none';
-                });
-                document.body.classList.remove('admin-mode');
-            }
+            const messageContent = document.createElement('div');
+            messageContent.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageContent.textContent = message;
             
-            function showNotification(title, content) {
-                document.getElementById('notificationTitle').textContent = title;
-                document.getElementById('notificationContent').textContent = content;
-                notification.style.display = 'block';
-            }
+            const messageTime = document.createElement('div');
+            messageTime.classList.add('message-time');
+            const now = new Date();
+            messageTime.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
             
-            function playSound(sound) {
-                sound.currentTime = 0;
-                sound.play();
-            }
+            messageContent.appendChild(messageTime);
+            messageElement.appendChild(messageContent);
+            botMessages.appendChild(messageElement);
             
-            function analyzeDiceV4(diceValues) {
-                const sum = diceValues.reduce((a, b) => a + b, 0);
-                const isTai = sum >= 11;
-                
-                // Simulate analysis based on previous patterns
-                const patterns = [
-                    { sequence: ['TÀI', 'XỈU', 'XỈU'], probability: 85 },
-                    { sequence: ['TÀI', 'TÀI', 'TÀI'], probability: 72 },
-                    { sequence: ['TÀI', 'XỈU', 'TÀI'], probability: 68 },
-                    { sequence: ['XỈU', 'XỈU', 'TÀI'], probability: 78 },
-                    { sequence: ['XỈU', 'TÀI', 'TÀI'], probability: 65 }
-                ];
-                
-                // Select two patterns with highest probability
-                const selectedPatterns = patterns.sort((a, b) => b.probability - a.probability).slice(0, 2);
-                
-                let predictionHTML = `<p>Kết quả hiện tại: <span class="${isTai ? 'tai' : 'xiu'}">${isTai ? 'TÀI' : 'XỈU'}</span></p>`;
-                predictionHTML += `<p>Dự đoán ván tiếp theo:</p>`;
-                
-                let probabilityHTML = '<div class="probability-item">';
-                
-                selectedPatterns.forEach(pattern => {
-                    const nextResult = pattern.sequence[2];
-                    predictionHTML += `<p>- ${pattern.sequence[0]} - ${pattern.sequence[1]} - <span class="${nextResult === 'TÀI' ? 'tai' : 'xiu'}">${nextResult}</span> (${pattern.probability}%)</p>`;
-                    
-                    probabilityHTML += `
-                        <div>
-                            <span>${pattern.sequence.join(' - ')}</span>
-                            <div class="probability-bar">
-                                <div class="probability-fill" style="width: ${pattern.probability}%"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                probabilityHTML += '</div>';
-                
-                return {
-                    prediction: predictionHTML,
-                    probability: probabilityHTML
-                };
-            }
+            // Scroll to bottom
+            botMessages.scrollTop = botMessages.scrollHeight;
+        }
+        
+        // Analyze dice for Tool V4
+        function analyzeDiceV4(diceValues) {
+            // Simple analysis based on dice values
+            const sum = diceValues.reduce((a, b) => a + b, 0);
+            const isTai = sum > 10;
             
-            function analyzeDiceV5(diceValues) {
-                const sum = diceValues.reduce((a, b) => a + b, 0);
-                const isTai = sum >= 11;
-                
-                // Simulate analysis for next result
-                const winProbability = Math.floor(Math.random() * 51) + 50; // 50-100%
-                const nextIsTai = winProbability > 65;
-                
-                // Generate random dice for prediction
-                const nextDice = [
-                    Math.floor(Math.random() * 6) + 1,
-                    Math.floor(Math.random() * 6) + 1,
-                    Math.floor(Math.random() * 6) + 1
-                ];
-                const nextSum = nextDice.reduce((a, b) => a + b, 0);
-                const nextIsTaiActual = nextSum >= 11;
-                
-                let predictionHTML = `
-                    <p>Kết quả người dùng: ${diceValues.join('-')} (${isTai ? 'TÀI' : 'XỈU'})</p>
-                    <p>Kết quả ván sau: <span class="${nextIsTai ? 'tai' : 'xiu'}">${nextIsTai ? 'TÀI' : 'XỈU'}</span></p>
-                    <p>Xí ngầu dự đoán: ${nextDice.join('-')} (Tổng: ${nextSum})</p>
-                    <p>Xác suất thắng: ${winProbability}%</p>
-                `;
-                
-                let probabilityHTML = `
+            // Generate patterns based on previous results (simulated)
+            const patterns = [
+                { pattern: 'TÀI - XỈU - XỈU', probability: 75 },
+                { pattern: 'TÀI - TÀI - TÀI', probability: 65 },
+                { pattern: 'TÀI - XỈU - TÀI', probability: 80 },
+                { pattern: 'XỈU - XỈU - TÀI', probability: 70 },
+                { pattern: 'XỈU - TÀI - TÀI', probability: 60 }
+            ];
+            
+            // Sort by probability and take top 2
+            patterns.sort((a, b) => b.probability - a.probability);
+            const topPatterns = patterns.slice(0, 2);
+            
+            // Build result HTML
+            let resultHTML = `
+                <p>Kết quả hiện tại: <span class="${isTai ? 'tai' : 'xiu'}">${isTai ? 'TÀI' : 'XỈU'}</span></p>
+                <p>Dự đoán ván tiếp theo có thể theo các cầu sau:</p>
+            `;
+            
+            topPatterns.forEach((pattern, index) => {
+                resultHTML += `
                     <div class="probability-item">
-                        <div>
-                            <span>Độ chính xác dự đoán</span>
-                            <div class="probability-bar">
-                                <div class="probability-fill" style="width: ${winProbability}%"></div>
-                            </div>
-                        </div>
+                        <span>Cầu ${index + 1}: ${pattern.pattern}</span>
+                        <span>${pattern.probability}%</span>
+                    </div>
+                    <div class="probability-bar">
+                        <div class="probability-fill" style="width: ${pattern.probability}%"></div>
                     </div>
                 `;
-                
-                return {
-                    prediction: predictionHTML,
-                    probability: probabilityHTML
-                };
-            }
+            });
             
-            function startToolTimer() {
-                // Set tool end time to 3 hours from now
-                toolEndTime = new Date().getTime() + (3 * 60 * 60 * 1000);
+            resultHTML += `<p>Khuyến nghị: <strong>${topPatterns[0].pattern.split(' - ')[2]}</strong></p>`;
+            
+            return resultHTML;
+        }
+        
+        // Predict dice for Tool V5
+        function predictDiceV5(diceValues) {
+            // Simple prediction based on dice values
+            const sum = diceValues.reduce((a, b) => a + b, 0);
+            const isTai = sum > 10;
+            
+            // Generate prediction with some probability
+            const winProbability = Math.floor(Math.random() * 51) + 50; // 50-100%
+            
+            // Predict next dice values (simple algorithm)
+            const nextDice = diceValues.map(value => {
+                // Simple prediction: add 1-3, wrap around if > 6
+                const nextValue = (value + Math.floor(Math.random() * 3) + 1) % 6;
+                return nextValue === 0 ? 6 : nextValue;
+            });
+            
+            const nextSum = nextDice.reduce((a, b) => a + b, 0);
+            const nextIsTai = nextSum > 10;
+            
+            // Build result HTML
+            let resultHTML = `
+                <p>Kết quả người dùng: ${diceValues.join('-')}</p>
+                <p>Kết quả ván sau: <span class="${nextIsTai ? 'tai' : 'xiu'}">${nextIsTai ? 'TÀI' : 'XỈU'}</span></p>
+                <p>Xí ngầu dự đoán: ${nextDice.join('-')}</p>
+                <p>Xác suất thắng: ${winProbability}%</p>
+            `;
+            
+            return resultHTML;
+        }
+        
+        // Handle lucky draw
+        function handleLuckyDraw() {
+            // Rotate wheel
+            const rotations = 3 + Math.random() * 5; // 3-8 rotations
+            const degrees = rotations * 360;
+            wheel.style.transform = `rotate(${degrees}deg)`;
+            
+            // Calculate prize (between 1000 and 30000)
+            const prize = Math.floor(Math.random() * 29000) + 1000;
+            
+            // Show result after animation
+            setTimeout(() => {
+                drawAmount.textContent = `${prize.toLocaleString()} coin`;
+                drawResult.style.display = 'block';
                 
-                // Update timer immediately
-                updateToolTimer();
-                
-                // Update timer every second
-                if (toolTimer) {
-                    clearInterval(toolTimer);
+                // Add prize to user balance (after 24h in real scenario)
+                if (currentUser && userData[currentUser]) {
+                    // For demo, add immediately
+                    userData[currentUser].balance += prize;
+                    updateBalanceDisplay();
+                    
+                    addMessage(`Chúc mừng! Bạn đã nhận được ${prize.toLocaleString()} coin từ rút thăm may mắn.`);
                 }
-                
-                toolTimer = setInterval(updateToolTimer, 1000);
-            }
+            }, 3000);
+        }
+        
+        // Event Listeners
+        loginBtn.addEventListener('click', () => {
+            playClickSound();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
             
-            function updateToolTimer() {
-                if (!toolEndTime) return;
-                
-                const now = new Date().getTime();
-                const distance = toolEndTime - now;
-                
-                // If the countdown is over, clear the timer
-                if (distance < 0) {
-                    clearInterval(toolTimer);
-                    document.getElementById('toolTimer').textContent = '00:00:00';
-                    showNotification('Hết hạn', 'Thời gian sử dụng tool của bạn đã hết. Vui lòng thanh toán để tiếp tục sử dụng.');
-                    return;
-                }
-                
-                // Calculate hours, minutes and seconds
-                const hours = Math.floor(distance / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                // Display the result
-                document.getElementById('toolTimer').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-            
-            function initHistoryChart() {
-                const historyChart = document.getElementById('historyChart');
-                const data = [15, 12, 8, 10, 7, 14, 11];
-                const maxValue = Math.max(...data);
-                
-                data.forEach((value, index) => {
-                    const bar = document.createElement('div');
-                    bar.className = 'chart-bar';
-                    bar.style.height = `${(value / maxValue) * 100}%`;
-                    bar.style.left = `${index * (100 / data.length)}%`;
-                    bar.style.width = `${(90 / data.length)}%`;
-                    historyChart.appendChild(bar);
-                });
+            if (username === 'leduc' && password === 'bevis') {
+                currentUser = username;
+                loginPage.style.display = 'none';
+                appContainer.style.display = 'block';
+                document.body.classList.add('admin-mode');
+                updateBalanceDisplay();
+                userAvatar.textContent = username.substring(0, 2).toUpperCase();
+                addMessage(`Xin chào Admin ${username}! Tôi có thể giúp gì cho bạn?`);
+            } else if (userData[username] && userData[username].password === password) {
+                currentUser = username;
+                loginPage.style.display = 'none';
+                appContainer.style.display = 'block';
+                updateBalanceDisplay();
+                userAvatar.textContent = username.substring(0, 2).toUpperCase();
+                addMessage(`Xin chào ${username}! Tôi có thể giúp gì cho bạn?`);
+            } else {
+                showNotification('LỖI', 'Tên đăng nhập hoặc mật khẩu không đúng.');
             }
         });
+        
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            playClickSound();
+            registerModal.style.display = 'flex';
+        });
+        
+        closeRegister.addEventListener('click', () => {
+            playClickSound();
+            registerModal.style.display = 'none';
+        });
+        
+        registerBtn.addEventListener('click', () => {
+            playClickSound();
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (!username || !password || !confirmPassword) {
+                showNotification('LỖI', 'Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('LỖI', 'Mật khẩu xác nhận không khớp.');
+                return;
+            }
+            
+            if (userData[username]) {
+                showNotification('LỖI', 'Tên đăng nhập đã tồn tại.');
+                return;
+            }
+            
+            // Add new user
+            userData[username] = {
+                password: password,
+                balance: 0,
+                isAdmin: false
+            };
+            
+            showNotification('THÀNH CÔNG', 'Đăng ký tài khoản thành công. Vui lòng đăng nhập.');
+            registerModal.style.display = 'none';
+        });
+        
+        missionBtn.addEventListener('click', () => {
+            playClickSound();
+            showNotification('THÔNG BÁO', 'Bạn đã hoàn thành nhiệm vụ. Vui lòng chờ xác nhận.');
+        });
+        
+        checkBtn.addEventListener('click', () => {
+            playClickSound();
+            showNotification('THÔNG BÁO', 'Hệ thống đang kiểm tra nhiệm vụ của bạn...');
+        });
+        
+        menuToggle.addEventListener('click', () => {
+            playClickSound();
+            sidebar.classList.add('open');
+        });
+        
+        closeSidebar.addEventListener('click', () => {
+            playClickSound();
+            sidebar.classList.remove('open');
+        });
+        
+        logoutBtn.addEventListener('click', () => {
+            playClickSound();
+            currentUser = null;
+            appContainer.style.display = 'none';
+            loginPage.style.display = 'flex';
+            document.body.classList.remove('admin-mode');
+        });
+        
+        toolBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                playClickSound();
+                const tool = btn.getAttribute('data-tool');
+                
+                // Update active button
+                toolBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active container
+                toolContainers.forEach(container => container.classList.remove('active'));
+                document.getElementById(tool).classList.add('active');
+                
+                // Update sidebar active item
+                document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+                document.querySelector(`.sidebar-menu a[data-tool="${tool}"]`).classList.add('active');
+            });
+        });
+        
+        analyzeBtn.addEventListener('click', () => {
+            playClickSound();
+            
+            if (!canAffordTool()) {
+                showNotification(
+                    'LỖI', 
+                    `Bạn không đủ coin để sử dụng công cụ này. Cần ${currentToolCost.toLocaleString()} coin.`,
+                    () => {
+                        paymentModal.style.display = 'flex';
+                        hideNotification();
+                    }
+                );
+                return;
+            }
+            
+            const diceInput = document.getElementById('diceInput').value;
+            const diceValues = diceInput.split(' ').map(val => parseInt(val.trim())).filter(val => !isNaN(val) && val >= 1 && val <= 6);
+            
+            if (diceValues.length !== 3) {
+                showNotification('LỖI', 'Vui lòng nhập 3 số xí ngầu hợp lệ (từ 1 đến 6), cách nhau bằng khoảng trắng.');
+                return;
+            }
+            
+            // Deduct tool cost
+            deductToolCost();
+            
+            // Analyze and show result
+            v4Probability.innerHTML = analyzeDiceV4(diceValues);
+            v4Result.style.display = 'block';
+            
+            // Add message to chat
+            addMessage(`Đã phân tích xí ngầu: ${diceValues.join('-')}. Kết quả: ${diceValues.reduce((a, b) => a + b, 0) > 10 ? 'TÀI' : 'XỈU'}`);
+            addMessage(`Đề xuất: ${v4Probability.querySelector('strong').textContent}`);
+        });
+        
+        predictBtn.addEventListener('click', () => {
+            playClickSound();
+            
+            if (!canAffordTool()) {
+                showNotification(
+                    'LỖI', 
+                    `Bạn không đủ coin để sử dụng công cụ này. Cần ${currentToolCost.toLocaleString()} coin.`,
+                    () => {
+                        paymentModal.style.display = 'flex';
+                        hideNotification();
+                    }
+                );
+                return;
+            }
+            
+            const diceInput = document.getElementById('diceInputV5').value;
+            const diceValues = diceInput.split(' ').map(val => parseInt(val.trim())).filter(val => !isNaN(val) && val >= 1 && val <= 6);
+            
+            if (diceValues.length !== 3) {
+                showNotification('LỖI', 'Vui lòng nhập 3 số xí ngầu hợp lệ (từ 1 đến 6), cách nhau bằng khoảng trắng.');
+                return;
+            }
+            
+            // Deduct tool cost
+            deductToolCost();
+            
+            // Predict and show result
+            v5Probability.innerHTML = predictDiceV5(diceValues);
+            v5Result.style.display = 'block';
+            
+            // Add message to chat
+            addMessage(`Đã dự đoán xí ngầu: ${diceValues.join('-')}.`);
+            addMessage(`Kết quả dự đoán: ${v5Probability.querySelector('span').textContent}`);
+        });
+        
+        closeNotification.addEventListener('click', hideNotification);
+        
+        notificationCancel.addEventListener('click', hideNotification);
+        
+        paymentBtn.addEventListener('click', () => {
+            playClickSound();
+            paymentModal.style.display = 'flex';
+        });
+        
+        closePayment.addEventListener('click', () => {
+            playClickSound();
+            paymentModal.style.display = 'none';
+        });
+        
+        profileBtn.addEventListener('click', () => {
+            playClickSound();
+            
+            if (currentUser && userData[currentUser]) {
+                document.getElementById('profileUsername').textContent = currentUser;
+                document.getElementById('profileBalance').textContent = `${userData[currentUser].balance.toLocaleString()} coin`;
+                
+                // Set mock data for demo
+                document.getElementById('profileEmail').textContent = `${currentUser}@example.com`;
+                document.getElementById('profileJoinDate').textContent = '01/01/2023';
+            }
+            
+            profileModal.style.display = 'flex';
+        });
+        
+        closeProfile.addEventListener('click', () => {
+            playClickSound();
+            profileModal.style.display = 'none';
+        });
+        
+        profileEditBtn.addEventListener('click', () => {
+            playClickSound();
+            profileEditBtn.style.display = 'none';
+            profileSaveBtn.style.display = 'inline-block';
+            profileCancelBtn.style.display = 'inline-block';
+            
+            // Make fields editable (for demo, only email)
+            document.getElementById('profileEmail').contentEditable = true;
+            document.getElementById('profileEmail').style.borderBottom = '1px dashed var(--primary-color)';
+        });
+        
+        profileSaveBtn.addEventListener('click', () => {
+            playClickSound();
+            profileEditBtn.style.display = 'inline-block';
+            profileSaveBtn.style.display = 'none';
+            profileCancelBtn.style.display = 'none';
+            
+            // Save changes (for demo, only email)
+            document.getElementById('profileEmail').contentEditable = false;
+            document.getElementById('profileEmail').style.borderBottom = 'none';
+            
+            showNotification('THÀNH CÔNG', 'Thông tin đã được cập nhật.');
+        });
+        
+        profileCancelBtn.addEventListener('click', () => {
+            playClickSound();
+            profileEditBtn.style.display = 'inline-block';
+            profileSaveBtn.style.display = 'none';
+            profileCancelBtn.style.display = 'none';
+            
+            // Revert changes
+            document.getElementById('profileEmail').contentEditable = false;
+            document.getElementById('profileEmail').style.borderBottom = 'none';
+            document.getElementById('profileEmail').textContent = `${currentUser}@example.com`;
+        });
+        
+        drawBtn.addEventListener('click', () => {
+            playClickSound();
+            handleLuckyDraw();
+        });
+        
+        sendMessageBtn.addEventListener('click', () => {
+            if (messageInput.value.trim() !== '') {
+                addMessage(messageInput.value, true);
+                
+                // Simulate bot response after a short delay
+                setTimeout(() => {
+                    addMessage('Cảm ơn bạn đã liên hệ. Tôi sẽ hỗ trợ bạn trong thời gian sớm nhất.');
+                }, 1000);
+                
+                messageInput.value = '';
+            }
+        });
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessageBtn.click();
+            }
+        });
+        
+        adminBtn.addEventListener('click', () => {
+            playClickSound();
+            adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        addCoinBtn.addEventListener('click', () => {
+            playClickSound();
+            const username = document.getElementById('adminUsername').value;
+            const amount = parseInt(document.getElementById('adminAmount').value);
+            
+            if (!username || !amount) {
+                showNotification('LỖI', 'Vui lòng nhập tên người dùng và số coin.');
+                return;
+            }
+            
+            if (!userData[username]) {
+                showNotification('LỖI', 'Người dùng không tồn tại.');
+                return;
+            }
+            
+            userData[username].balance += amount;
+            showNotification('THÀNH CÔNG', `Đã thêm ${amount.toLocaleString()} coin cho ${username}.`);
+            
+            // Update balance display if current user is the one receiving coins
+            if (currentUser === username) {
+                updateBalanceDisplay();
+            }
+        });
+        
+        playPauseBtn.addEventListener('click', () => {
+            playClickSound();
+            isPlaying = !isPlaying;
+            playPauseBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+        });
+        
+        // Initialize the app
+        initParticles();
+        
+        // Demo: Add some initial chat messages
+        setTimeout(() => {
+            addMessage('Tôi có thể giúp bạn phân tích xác suất xí ngầu và dự đoán kết quả.');
+        }, 2000);
+        
+        setTimeout(() => {
+            addMessage('Hãy thử sử dụng Tool V4 hoặc Tool V5 để trải nghiệm tính năng mới!');
+        }, 4000);
     </script>
 </body>
 </html>
