@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bevis Tool Tx - Premium Analysis Tools</title>
+    <title>Bevis Tool Tx - AI Tài Xỉu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #9c27b0;
-            --secondary-color: #673ab7;
-            --accent-color: #e91e63;
+            --primary-dark: #7b1fa2;
+            --primary-light: #ba68c8;
+            --secondary-color: #00bcd4;
+            --accent-color: #ff4081;
             --dark-bg: #121212;
             --darker-bg: #0a0a0a;
             --text-color: #ffffff;
             --panel-bg: rgba(40, 40, 40, 0.85);
             --glass-effect: rgba(255, 255, 255, 0.05);
-            --success-color: #4CAF50;
-            --error-color: #F44336;
-            --warning-color: #FF9800;
-            --info-color: #2196F3;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
         }
         
@@ -36,6 +37,9 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            background-image: url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
         }
         
         body::before {
@@ -45,20 +49,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1643287887552-07bd4f235f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
-            background-size: cover;
-            z-index: -2;
-            filter: blur(8px) brightness(0.4);
-        }
-        
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(20, 0, 30, 0.95) 0%, rgba(40, 0, 60, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(28, 0, 32, 0.95) 0%, rgba(50, 0, 50, 0.9) 100%);
             z-index: -1;
         }
         
@@ -72,8 +63,8 @@
             user-select: none;
         }
         
-        /* Login Page */
-        .login-container {
+        /* Login/Register Page */
+        .auth-container {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -82,7 +73,7 @@
             animation: fadeIn 0.5s ease-in-out;
         }
         
-        .login-box {
+        .auth-box {
             background-color: var(--panel-bg);
             backdrop-filter: blur(10px);
             border-radius: 15px;
@@ -95,21 +86,78 @@
             transform-style: preserve-3d;
             transform: perspective(1000px);
             transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .login-box:hover {
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(156, 39, 176, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+            z-index: 0;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .auth-box:hover {
             transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
             box-shadow: 0 15px 35px rgba(156, 39, 176, 0.3);
         }
         
-        .login-title {
+        .auth-title {
             font-size: 28px;
             margin-bottom: 30px;
             color: var(--primary-color);
             text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            z-index: 1;
         }
         
-        .login-input {
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--darker-bg);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .auth-input {
             width: 100%;
             padding: 15px;
             margin-bottom: 20px;
@@ -121,13 +169,13 @@
             transition: all 0.3s;
         }
         
-        .login-input:focus {
+        .auth-input:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
         }
         
-        .login-btn {
+        .auth-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -139,39 +187,81 @@
             transition: all 0.3s;
             width: 100%;
             margin-top: 10px;
+            position: relative;
+            overflow: hidden;
         }
         
-        .login-btn:hover {
-            background-color: #8e24aa;
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+        
+        .auth-btn:hover {
+            background-color: var(--primary-dark);
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
         }
         
-        .login-btn:active {
+        .auth-btn:active {
             transform: translateY(0);
         }
         
-        .register-link {
+        .social-login {
             margin-top: 20px;
-            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            z-index: 1;
         }
         
-        .register-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .google-login {
-            margin-top: 20px;
+        .social-btn {
             display: flex;
+            align-items: center;
             justify-content: center;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .google-btn {
+            background-color: #DB4437;
+            color: white;
+        }
+        
+        .facebook-btn {
+            background-color: #4267B2;
+            color: white;
+        }
+        
+        .social-btn i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .social-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
         
         .mission-container {
             display: none;
             text-align: center;
             margin-top: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .mission-text {
@@ -191,9 +281,9 @@
         }
         
         .mission-btn:hover {
-            background-color: #d81b60;
+            background-color: #e6009e;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 0, 170, 0.3);
         }
         
         .check-btn {
@@ -209,58 +299,15 @@
         }
         
         .check-btn:hover {
-            background-color: #5e35b1;
+            background-color: #0097a7;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3);
-        }
-        
-        /* Register Modal */
-        .register-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .register-content {
-            background-color: var(--darker-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-        
-        .register-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .close-register {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
         }
         
         /* Main App */
         .app-container {
             display: none;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             animation: fadeIn 0.5s ease-in-out;
@@ -283,6 +330,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
         }
         
         .user-info {
@@ -295,19 +344,13 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
             color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+            border: 2px solid var(--primary-light);
         }
         
         .user-balance {
@@ -374,6 +417,7 @@
         .sidebar-title {
             font-size: 20px;
             color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
         }
         
         .close-sidebar {
@@ -399,6 +443,9 @@
             text-decoration: none;
             border-radius: 5px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .sidebar-menu a:hover {
@@ -407,7 +454,7 @@
         }
         
         .sidebar-menu a.active {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
         }
         
@@ -419,52 +466,127 @@
             display: block;
         }
         
-        .tool-selector {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
+        /* Tool Cards */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            flex-wrap: wrap;
+            margin-bottom: 30px;
         }
         
-        .tool-btn {
-            padding: 12px 25px;
-            background-color: var(--darker-bg);
-            border: 1px solid var(--primary-color);
-            color: var(--text-color);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        .tool-card {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
+            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
         
-        .tool-btn::before {
+        .tool-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(156, 39, 176, 0.2), transparent);
-            transition: 0.5s;
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .tool-btn:hover::before {
-            left: 100%;
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(156, 39, 176, 0.3);
         }
         
-        .tool-btn.active {
-            background-color: var(--primary-color);
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+        
+        .tool-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .tool-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .tool-description {
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .tool-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .price-tag {
+            background-color: var(--darker-bg);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .rent-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
         }
         
-        .tool-btn:hover {
-            transform: translateY(-3px);
+        .rent-btn:hover {
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
         }
         
+        .tool-features {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .tool-features li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .tool-features li i {
+            color: var(--primary-color);
+        }
+        
+        /* Tool Containers */
         .tool-container {
             background-color: var(--panel-bg);
             backdrop-filter: blur(10px);
@@ -493,6 +615,7 @@
             color: var(--primary-color);
             text-align: center;
             text-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+            font-family: 'Orbitron', sans-serif;
         }
         
         .input-group {
@@ -505,7 +628,7 @@
             font-weight: bold;
         }
         
-        input[type="number"], input[type="text"], select {
+        input[type="number"], input[type="text"], select, textarea {
             width: 100%;
             padding: 12px;
             background-color: var(--darker-bg);
@@ -516,14 +639,14 @@
             transition: all 0.3s;
         }
         
-        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+        input[type="number"]:focus, input[type="text"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
         }
         
         .submit-btn {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
             border: none;
             padding: 12px 25px;
@@ -570,7 +693,6 @@
         }
         
         .submit-btn:hover {
-            background-color: #8e24aa;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
         }
@@ -674,23 +796,23 @@
         }
         
         .check-btn {
-            background-color: var(--info-color);
+            background-color: var(--secondary-color);
             color: white;
         }
         
         .history-btn {
-            background-color: var(--secondary-color);
+            background-color: #673AB7;
             color: white;
         }
         
         .new-game-btn {
             background-color: var(--warning-color);
-            color: white;
+            color: black;
         }
         
         .back-btn {
             background-color: #9E9E9E;
-            color: white;
+            color: black;
         }
         
         .action-btn:hover {
@@ -721,7 +843,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             margin-right: 15px;
             display: flex;
             justify-content: center;
@@ -745,7 +867,7 @@
         .bot-status {
             margin-left: auto;
             font-size: 12px;
-            color: var(--primary-color);
+            color: var(--success-color);
             display: flex;
             align-items: center;
         }
@@ -756,7 +878,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: var(--primary-color);
+            background-color: var(--success-color);
             margin-right: 5px;
             animation: pulse 1.5s infinite;
         }
@@ -824,11 +946,11 @@
         
         .user-message {
             margin-left: auto;
-            background-color: rgba(103, 58, 183, 0.1);
+            background-color: rgba(0, 188, 212, 0.1);
             padding: 12px 18px;
             border-radius: 18px 0 18px 18px;
             max-width: 80%;
-            border: 1px solid rgba(103, 58, 183, 0.2);
+            border: 1px solid rgba(0, 188, 212, 0.2);
             position: relative;
         }
         
@@ -840,7 +962,7 @@
             width: 0;
             height: 0;
             border: 10px solid transparent;
-            border-left-color: rgba(103, 58, 183, 0.1);
+            border-left-color: rgba(0, 188, 212, 0.1);
             border-right: 0;
             margin-top: 0;
         }
@@ -876,7 +998,7 @@
         }
         
         .send-btn {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
             border: none;
             padding: 12px 20px;
@@ -888,382 +1010,82 @@
         }
         
         .send-btn:hover {
-            background-color: #8e24aa;
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
         
-        /* Notification */
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
+        /* Profile Section */
+        .profile-section {
             background-color: var(--panel-bg);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 400px;
+            border-radius: 15px;
+            padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            z-index: 1001;
-            animation: slideInRight 0.5s ease-in-out;
-        }
-        
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100%); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .notification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .notification-title {
-            font-size: 18px;
-            color: var(--primary-color);
-            font-weight: bold;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .close-notification {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 20px;
-            cursor: pointer;
-            position: absolute;
-            right: 15px;
-            top: 15px;
-        }
-        
-        .notification-content {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .notification-footer {
-            text-align: center;
-        }
-        
-        .notification-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: 0 5px;
-        }
-        
-        /* Payment Modal */
-        .payment-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .payment-content {
-            background-color: var(--darker-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-        
-        .payment-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .payment-info {
-            background-color: var(--dark-bg);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .payment-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .payment-item:last-child {
-            border-bottom: none;
-        }
-        
-        .copy-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .payment-note {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 15px;
-            text-align: left;
-        }
-        
-        .close-payment {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        
-        /* History Modal */
-        .history-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .history-content {
-            background-color: var(--darker-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 1000px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            animation: modalFadeIn 0.3s ease-in-out;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .history-title {
-            font-size: 24px;
-            color: var(--primary-color);
-            text-align: center;
-            width: 100%;
-        }
-        
-        .close-history {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-        
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .history-table th, .history-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .history-table th {
-            background-color: rgba(156, 39, 176, 0.1);
-            color: var(--primary-color);
-            position: sticky;
-            top: 0;
-        }
-        
-        .history-table tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        
-        .correct {
-            color: var(--success-color);
-        }
-        
-        .incorrect {
-            color: var(--error-color);
-        }
-        
-        /* Music Player */
-        .music-player {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 999;
-        }
-        
-        .music-control {
-            background-color: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .music-control:hover {
-            transform: scale(1.1);
-        }
-        
-        .music-info {
-            padding-right: 10px;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .music-title {
-            font-size: 14px;
-            color: var(--primary-color);
-        }
-        
-        .music-artist {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        /* Profile Modal */
-        .profile-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .profile-content {
-            background-color: var(--darker-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            animation: modalFadeIn 0.3s ease-in-out;
         }
         
         .profile-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            position: relative;
+            margin-bottom: 30px;
         }
         
-        .profile-title {
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            margin-right: 20px;
+        }
+        
+        .profile-info h2 {
             font-size: 24px;
+            margin-bottom: 5px;
             color: var(--primary-color);
-            text-align: center;
-            width: 100%;
         }
         
-        .close-profile {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-            position: absolute;
-            right: 0;
-            top: 0;
+        .profile-info p {
+            color: rgba(255, 255, 255, 0.7);
         }
         
-        .profile-info {
-            display: flex;
-            flex-direction: column;
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
-        .profile-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .stat-card {
+            background-color: var(--darker-bg);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .profile-item:last-child {
-            border-bottom: none;
-        }
-        
-        .profile-label {
+        .stat-value {
+            font-size: 24px;
             font-weight: bold;
             color: var(--primary-color);
+            margin-bottom: 5px;
         }
         
-        .profile-value {
-            color: var(--text-color);
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .profile-actions {
             display: flex;
-            justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            flex-wrap: wrap;
         }
         
         .profile-btn {
@@ -1275,247 +1097,142 @@
             border: none;
         }
         
-        .profile-edit {
-            background-color: var(--info-color);
+        .change-password-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
         }
         
-        .profile-save {
-            background-color: var(--success-color);
+        .edit-profile-btn {
+            background-color: var(--secondary-color);
             color: white;
-            display: none;
         }
         
-        .profile-cancel {
-            background-color: var(--error-color);
+        .lucky-draw-btn {
+            background: linear-gradient(135deg, var(--accent-color), #e91e63);
             color: white;
+        }
+        
+        .profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Lucky Draw Modal */
+        .lucky-draw-modal {
             display: none;
-        }
-        
-        /* Lucky Draw */
-        .lucky-draw {
-            display: none;
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        .draw-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .draw-container {
-            background-color: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .draw-wheel {
-            width: 300px;
-            height: 300px;
-            margin: 0 auto;
-            position: relative;
-            margin-bottom: 30px;
-        }
-        
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                var(--primary-color) 0% 10%,
-                var(--secondary-color) 10% 20%,
-                var(--accent-color) 20% 30%,
-                var(--success-color) 30% 40%,
-                var(--info-color) 40% 50%,
-                var(--warning-color) 50% 60%,
-                var(--error-color) 60% 70%,
-                #9C27B0 70% 80%,
-                #673AB7 80% 90%,
-                #3F51B5 90% 100%
-            );
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        }
-        
-        .wheel-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background-color: var(--darker-bg);
-            border-radius: 50%;
-            z-index: 2;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .draw-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 18px;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-        
-        .draw-btn:hover {
-            background-color: #8e24aa;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
-        }
-        
-        .draw-result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: var(--darker-bg);
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .draw-result-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-        
-        .draw-amount {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--success-color);
-            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-            margin: 10px 0;
-        }
-        
-        /* Particles */
-        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
         }
         
-        .particle {
-            position: absolute;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 15s infinite linear;
+        .lucky-draw-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-in-out;
         }
         
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
-                opacity: 0;
-            }
+        .lucky-draw-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .login-box {
-                padding: 30px 20px;
-            }
-            
-            .app-container {
-                padding: 10px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                padding-bottom: 15px;
-            }
-            
-            .user-info {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .tool-selector {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .tool-btn {
-                width: 100%;
-            }
-            
-            .bot-messages {
-                height: 300px;
-            }
-            
-            .music-player {
-                bottom: 10px;
-                left: 10px;
-                right: 10px;
-                justify-content: center;
-            }
-            
-            .draw-wheel {
-                width: 250px;
-                height: 250px;
-            }
-        }
-        
-        /* Animation for buttons */
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--primary-color); }
-            50% { box-shadow: 0 0 20px var(--primary-color); }
-            100% { box-shadow: 0 0 5px var(--primary-color); }
-        }
-        
-        .glowing {
-            animation: glow 2s infinite;
-        }
-        
-        /* Animation for text */
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        
-        .typing-animation {
+        .lucky-draw-box {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
             overflow: hidden;
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end);
+        }
+        
+        .lucky-draw-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 2s infinite;
+        }
+        
+        .lucky-draw-btn {
+            background: linear-gradient(135deg, var(--accent-color), #e91e63);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .lucky-draw-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 0, 170, 0.3);
+        }
+        
+        .lucky-draw-result {
+            font-size: 18px;
+            margin-top: 20px;
+            color: var(--primary-color);
+        }
+        
+        .close-modal {
+            background-color: #9E9E9E;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background-color: #757575;
         }
         
         /* Admin Panel */
         .admin-panel {
-            display: none;
-            margin-top: 30px;
             background-color: var(--panel-bg);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
         }
         
         .admin-title {
@@ -1523,263 +1240,438 @@
             margin-bottom: 20px;
             color: var(--primary-color);
             text-align: center;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+            font-family: 'Orbitron', sans-serif;
         }
         
-        .admin-controls {
+        .admin-tabs {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
             margin-bottom: 20px;
-        }
-        
-        .admin-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px;
-            background-color: var(--darker-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            color: var(--text-color);
-            font-size: 16px;
+            overflow: hidden;
+            background-color: var(--darker-bg);
         }
         
-        .admin-btn {
+        .admin-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .admin-tab.active {
             background-color: var(--primary-color);
             color: white;
-            border: none;
-            padding: 12px 20px;
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .admin-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .user-list {
+            list-style: none;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--darker-bg);
             border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .add-money-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
         }
         
-        .admin-btn:hover {
-            background-color: #8e24aa;
+        .add-money-btn:hover {
+            background-color: #388E3C;
         }
         
-        .users-table {
+        .remove-user-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .remove-user-btn:hover {
+            background-color: #D32F2F;
+        }
+        
+        .transaction-history {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
         
-        .users-table th, .users-table td {
+        .transaction-history th, .transaction-history td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .users-table th {
-            background-color: rgba(156, 39, 176, 0.1);
+        .transaction-history th {
+            background-color: var(--darker-bg);
             color: var(--primary-color);
         }
         
-        .users-table tr:hover {
+        .transaction-history tr:hover {
             background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .auth-box {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tool-container {
+                padding: 20px;
+            }
+            
+            .bot-messages {
+                height: 300px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 250px;
+                left: -250px;
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 999;
+                background-color: rgba(0, 0, 0, 0.5);
+                border-radius: 5px;
+                padding: 5px 10px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+        
+        /* Sound Effects */
+        .sound-on {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .sound-on:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- Particles Background -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- Login Page -->
-    <div class="login-container" id="loginPage">
-        <div class="login-box">
-            <h1 class="login-title">BEVIS TOOL TX</h1>
-            <input type="text" class="login-input" id="loginUsername" placeholder="Tên đăng nhập">
-            <input type="password" class="login-input" id="loginPassword" placeholder="Mật khẩu">
-            <button class="login-btn" id="loginBtn">ĐĂNG NHẬP</button>
+    <!-- Auth Container -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-box">
+            <h1 class="auth-title">BEVIS TOOL TX</h1>
             
-            <div class="register-link">
-                Chưa có tài khoản? <a href="#" id="registerLink">Đăng ký ngay</a>
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="loginTab">Đăng nhập</div>
+                <div class="auth-tab" id="registerTab">Đăng ký</div>
             </div>
             
-            <div class="google-login">
-                <div id="g_id_onload"
-                    data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                    data-context="signin"
-                    data-ux_mode="popup"
-                    data-callback="handleGoogleSignIn"
-                    data-auto_prompt="false">
+            <form class="auth-form active" id="loginForm">
+                <input type="text" class="auth-input" placeholder="Tên đăng nhập" required>
+                <input type="password" class="auth-input" placeholder="Mật khẩu" required>
+                <button type="submit" class="auth-btn">Đăng nhập</button>
+                
+                <div class="social-login">
+                    <button type="button" class="social-btn google-btn">
+                        <i class="fab fa-google"></i> Đăng nhập với Google
+                    </button>
+                    <button type="button" class="social-btn facebook-btn">
+                        <i class="fab fa-facebook-f"></i> Đăng nhập với Facebook
+                    </button>
                 </div>
-                <div class="g_id_signin"
-                    data-type="standard"
-                    data-shape="rectangular"
-                    data-theme="filled_blue"
-                    data-text="signin_with"
-                    data-size="large"
-                    data-logo_alignment="left">
-                </div>
-            </div>
+            </form>
+            
+            <form class="auth-form" id="registerForm">
+                <input type="text" class="auth-input" placeholder="Tên đăng nhập" required>
+                <input type="password" class="auth-input" placeholder="Mật khẩu" required>
+                <input type="password" class="auth-input" placeholder="Xác nhận mật khẩu" required>
+                <button type="submit" class="auth-btn">Đăng ký</button>
+            </form>
             
             <div class="mission-container" id="missionContainer">
-                <p class="mission-text">Hoàn thành nhiệm vụ để nhận tài khoản Premium</p>
-                <button class="mission-btn" id="missionBtn">HOÀN THÀNH NHIỆM VỤ</button>
-                <button class="check-btn" id="checkBtn">KIỂM TRA</button>
+                <p class="mission-text">Hoàn thành nhiệm vụ để nhận thêm coin!</p>
+                <button class="mission-btn">Xem nhiệm vụ</button>
             </div>
         </div>
     </div>
     
-    <!-- Register Modal -->
-    <div class="register-modal" id="registerModal">
-        <div class="register-content">
-            <h2 class="register-title">ĐĂNG KÝ TÀI KHOẢN</h2>
-            <input type="text" class="login-input" id="regUsername" placeholder="Tên đăng nhập">
-            <input type="password" class="login-input" id="regPassword" placeholder="Mật khẩu">
-            <input type="password" class="login-input" id="regConfirmPassword" placeholder="Xác nhận mật khẩu">
-            <button class="login-btn" id="registerBtn">ĐĂNG KÝ</button>
-            <button class="close-register" id="closeRegister">ĐÓNG</button>
-        </div>
-    </div>
-    
-    <!-- Main App -->
+    <!-- Main App Container -->
     <div class="app-container" id="appContainer">
         <div class="header">
-            <a href="#" class="logo">
-                <i class="fas fa-dice"></i> BEVIS TOOL TX
-            </a>
-            
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
             
+            <a href="#" class="logo">
+                <i class="fas fa-dice"></i> BEVIS TOOL TX
+            </a>
+            
             <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
                 <div class="user-balance" id="userBalance">10,000 coin</div>
-                <div class="user-avatar" id="userAvatar">LD</div>
-                <button class="logout-btn" id="logoutBtn">ĐĂNG XUẤT</button>
+                <button class="logout-btn" id="logoutBtn">Đăng xuất</button>
             </div>
         </div>
         
-        <!-- Sidebar -->
+        <!-- Sidebar Menu -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2 class="sidebar-title">MENU</h2>
+                <h2 class="sidebar-title">Menu</h2>
                 <button class="close-sidebar" id="closeSidebar">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="#" class="active" data-tool="toolv4">Tool V4</a></li>
-                <li><a href="#" data-tool="toolv5">Tool V5</a></li>
-                <li><a href="#" data-tool="luckyDraw">Rút thăm may mắn</a></li>
-                <li><a href="#" id="profileBtn">Hồ sơ cá nhân</a></li>
-                <li><a href="#" id="paymentBtn">Nạp tiền</a></li>
-                <li class="admin-only"><a href="#" id="adminBtn">Admin Panel</a></li>
+                <li><a href="#" class="active"><i class="fas fa-home"></i> Trang chủ</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> Hồ sơ</a></li>
+                <li><a href="#"><i class="fas fa-wallet"></i> Nạp tiền</a></li>
+                <li><a href="#"><i class="fas fa-coins"></i> Rút tiền</a></li>
+                <li><a href="#"><i class="fas fa-history"></i> Lịch sử</a></li>
+                <li><a href="#"><i class="fas fa-gift"></i> Rút thăm may mắn</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Cài đặt</a></li>
+                <li class="admin-only"><a href="#"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
             </ul>
         </div>
         
-        <!-- Tool Selector -->
-        <div class="tool-selector">
-            <button class="tool-btn active" data-tool="toolv4">Tool V4</button>
-            <button class="tool-btn" data-tool="toolv5">Tool V5</button>
-            <button class="tool-btn" data-tool="luckyDraw">Rút thăm may mắn</button>
+        <!-- Tool Cards -->
+        <div class="tools-grid">
+            <div class="tool-card" data-tool="toolV4">
+                <div class="tool-card-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="tool-name">Tool V4 - AI Tài Xỉu</div>
+                </div>
+                <div class="tool-description">
+                    Phân tích xác suất và dự đoán kết quả tài xỉu dựa trên dữ liệu đầu vào.
+                </div>
+                <div class="tool-price">
+                    <span class="price-tag">10,000 coin / 3h</span>
+                    <button class="rent-btn">Thuê ngay</button>
+                </div>
+                <ul class="tool-features">
+                    <li><i class="fas fa-check-circle"></i> Phân tích xác suất chính xác</li>
+                    <li><i class="fas fa-check-circle"></i> Dự đoán kết quả tài/xỉu</li>
+                    <li><i class="fas fa-check-circle"></i> Hỗ trợ đa nền tảng</li>
+                </ul>
+            </div>
+            
+            <div class="tool-card" data-tool="toolV5">
+                <div class="tool-card-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="tool-name">Tool V5 - AI Xí Ngầu</div>
+                </div>
+                <div class="tool-description">
+                    Dự đoán xí ngầu với xác suất thắng cao dựa trên thuật toán AI.
+                </div>
+                <div class="tool-price">
+                    <span class="price-tag">10,000 coin / 3h</span>
+                    <button class="rent-btn">Thuê ngay</button>
+                </div>
+                <ul class="tool-features">
+                    <li><i class="fas fa-check-circle"></i> Dự đoán xí ngầu chính xác</li>
+                    <li><i class="fas fa-check-circle"></i> Xác suất thắng 50-100%</li>
+                    <li><i class="fas fa-check-circle"></i> Hỗ trợ 24/7</li>
+                </ul>
+            </div>
         </div>
         
-        <!-- Tool V4 -->
-        <div class="tool-container active" id="toolv4">
-            <h2 class="tool-title">TOOL V4 - PHÂN TÍCH XÁC SUẤT</h2>
+        <!-- Tool V4 Container -->
+        <div class="tool-container" id="toolV4">
+            <h2 class="tool-title">Tool V4 - AI Tài Xỉu</h2>
             
             <div class="input-group">
-                <label for="diceInput">Nhập 3 xí ngầu (cách nhau bằng khoảng trắng):</label>
-                <input type="text" id="diceInput" placeholder="Ví dụ: 1 4 6">
+                <label for="diceInputV4">Nhập 3 xí ngầu (cách nhau bằng khoảng trắng):</label>
+                <input type="text" id="diceInputV4" placeholder="Ví dụ: 1 4 6">
             </div>
             
-            <button class="submit-btn" id="analyzeBtn">PHÂN TÍCH</button>
+            <button class="submit-btn" id="analyzeV4">Phân tích</button>
             
-            <div class="result-container" id="v4Result">
-                <h3 class="result-title">KẾT QUẢ PHÂN TÍCH</h3>
-                <div class="prediction" id="v4Prediction"></div>
-                <div class="dice-probability" id="v4Probability"></div>
+            <div class="result-container" id="resultV4">
+                <h3 class="result-title">Kết quả phân tích</h3>
+                <div class="prediction" id="predictionV4"></div>
+                
+                <div class="dice-probability">
+                    <h4>Xác suất các cầu:</h4>
+                    <div class="probability-item">
+                        <span>Tài - Xỉu - Xỉu</span>
+                        <span>45%</span>
+                    </div>
+                    <div class="probability-bar">
+                        <div class="probability-fill" style="width: 45%"></div>
+                    </div>
+                    
+                    <div class="probability-item">
+                        <span>Xỉu - Tài - Tài</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="probability-bar">
+                        <div class="probability-fill" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn check-btn">Kiểm tra lịch sử</button>
+                <button class="action-btn new-game-btn">Ván mới</button>
+                <button class="action-btn back-btn">Quay lại</button>
             </div>
         </div>
         
-        <!-- Tool V5 -->
-        <div class="tool-container" id="toolv5">
-            <h2 class="tool-title">TOOL V5 - DỰ ĐOÁN XÍ NGẦU</h2>
+        <!-- Tool V5 Container -->
+        <div class="tool-container" id="toolV5">
+            <h2 class="tool-title">Tool V5 - AI Xí Ngầu</h2>
             
             <div class="input-group">
                 <label for="diceInputV5">Nhập 3 xí ngầu (cách nhau bằng khoảng trắng):</label>
                 <input type="text" id="diceInputV5" placeholder="Ví dụ: 1 4 6">
             </div>
             
-            <button class="submit-btn" id="predictBtn">DỰ ĐOÁN</button>
+            <button class="submit-btn" id="analyzeV5">Phân tích</button>
             
-            <div class="result-container" id="v5Result">
-                <h3 class="result-title">KẾT QUẢ DỰ ĐOÁN</h3>
-                <div class="prediction" id="v5Prediction"></div>
-                <div class="dice-probability" id="v5Probability"></div>
-            </div>
-        </div>
-        
-        <!-- Lucky Draw -->
-        <div class="lucky-draw" id="luckyDraw">
-            <h2 class="draw-title">RÚT THĂM MAY MẮN</h2>
-            
-            <div class="draw-container">
-                <p>Bạn có cơ hội nhận từ 1.000 đến 30.000 coin mỗi ngày!</p>
-                
-                <div class="draw-wheel">
-                    <div class="wheel" id="wheel"></div>
-                    <div class="wheel-center">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                </div>
-                
-                <button class="draw-btn" id="drawBtn">RÚT THĂM</button>
+            <div class="result-container" id="resultV5">
+                <h3 class="result-title">Kết quả phân tích</h3>
+                <p>KẾT QUẢ NGƯỜI DÙNG: <span id="userResultV5">0-0-0</span></p>
+                <p>KẾT QUẢ VÁN SAU: <span id="nextResultV5" class="tai">TÀI</span></p>
+                <p>XÍ NGẦU DỰ ĐOÁN: <span id="predictedDiceV5">4-5-6</span></p>
+                <p>XÁC SUẤT THẮNG: <span id="winProbabilityV5" class="tai">85%</span></p>
             </div>
             
-            <div class="draw-result" id="drawResult">
-                <h3 class="draw-result-title">CHÚC MỪNG!</h3>
-                <p>Bạn đã nhận được:</p>
-                <div class="draw-amount" id="drawAmount">10,000 coin</div>
-                <p>Coin sẽ được cộng vào tài khoản của bạn trong vòng 24h.</p>
+            <div class="action-buttons">
+                <button class="action-btn check-btn">Kiểm tra lịch sử</button>
+                <button class="action-btn new-game-btn">Ván mới</button>
+                <button class="action-btn back-btn">Quay lại</button>
             </div>
-        </div>
-        
-        <!-- Admin Panel -->
-        <div class="admin-panel" id="adminPanel">
-            <h2 class="admin-title">ADMIN PANEL</h2>
-            
-            <div class="admin-controls">
-                <input type="text" class="admin-input" id="adminUsername" placeholder="Tên người dùng">
-                <input type="number" class="admin-input" id="adminAmount" placeholder="Số coin">
-                <button class="admin-btn" id="addCoinBtn">THÊM COIN</button>
-            </div>
-            
-            <table class="users-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên người dùng</th>
-                        <th>Email</th>
-                        <th>Số dư</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTableBody">
-                    <tr>
-                        <td>1</td>
-                        <td>leduc</td>
-                        <td>admin@bevis.com</td>
-                        <td>1,000,000</td>
-                        <td>
-                            <button class="admin-btn">Chỉnh sửa</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>user1</td>
-                        <td>user1@example.com</td>
-                        <td>50,000</td>
-                        <td>
-                            <button class="admin-btn">Chỉnh sửa</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         
         <!-- Bot Chat Container -->
@@ -1788,736 +1680,494 @@
                 <div class="bot-avatar">
                     <i class="fas fa-robot"></i>
                 </div>
-                <div class="bot-name">Bevis Bot</div>
+                <div class="bot-name">Bevis AI Assistant</div>
                 <div class="bot-status">Đang hoạt động</div>
             </div>
             
             <div class="bot-messages" id="botMessages">
                 <div class="message">
                     <div class="bot-message">
-                        Xin chào! Tôi là Bevis Bot, trợ lý ảo của bạn. Tôi có thể giúp gì cho bạn?
+                        Xin chào! Tôi là trợ lý ảo Bevis. Tôi có thể giúp gì cho bạn?
                         <div class="message-time">10:30 AM</div>
+                    </div>
+                </div>
+                
+                <div class="message">
+                    <div class="user-message">
+                        Tôi muốn sử dụng Tool V4
+                        <div class="message-time">10:32 AM</div>
+                    </div>
+                </div>
+                
+                <div class="message">
+                    <div class="bot-message">
+                        Tool V4 có giá 10,000 coin cho 3 giờ sử dụng. Bạn có muốn tiếp tục?
+                        <div class="message-time">10:32 AM</div>
                     </div>
                 </div>
             </div>
             
             <div class="message-input-container">
-                <input type="text" class="message-input" id="messageInput" placeholder="Nhập tin nhắn của bạn...">
-                <button class="send-btn" id="sendMessageBtn">
+                <input type="text" class="message-input" placeholder="Nhập tin nhắn...">
+                <button class="send-btn">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
         </div>
-    </div>
-    
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <div class="notification-header">
-            <h3 class="notification-title" id="notificationTitle">THÔNG BÁO</h3>
-            <button class="close-notification" id="closeNotification">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="notification-content" id="notificationContent">
-            Nội dung thông báo
-        </div>
-        <div class="notification-footer">
-            <button class="notification-btn" id="notificationConfirm">XÁC NHẬN</button>
-            <button class="notification-btn" id="notificationCancel">HỦY</button>
-        </div>
-    </div>
-    
-    <!-- Payment Modal -->
-    <div class="payment-modal" id="paymentModal">
-        <div class="payment-content">
-            <h2 class="payment-title">NẠP TIỀN</h2>
-            
-            <div class="payment-info">
-                <div class="payment-item">
-                    <span>Số tài khoản:</span>
-                    <span>1234567890 <button class="copy-btn">Sao chép</button></span>
-                </div>
-                <div class="payment-item">
-                    <span>Chủ tài khoản:</span>
-                    <span>NGUYEN VAN A</span>
-                </div>
-                <div class="payment-item">
-                    <span>Ngân hàng:</span>
-                    <span>Vietcombank</span>
-                </div>
-                <div class="payment-item">
-                    <span>Nội dung chuyển khoản:</span>
-                    <span>NAPTIEN [Tên đăng nhập]</span>
-                </div>
-            </div>
-            
-            <p class="payment-note">
-                <strong>Lưu ý:</strong> Sau khi chuyển khoản, vui lòng chờ hệ thống xác nhận trong vòng 5-10 phút.
-                Nếu có bất kỳ vấn đề gì, vui lòng liên hệ với hỗ trợ viên.
-            </p>
-            
-            <button class="close-payment" id="closePayment">ĐÓNG</button>
-        </div>
-    </div>
-    
-    <!-- Profile Modal -->
-    <div class="profile-modal" id="profileModal">
-        <div class="profile-content">
+        
+        <!-- Profile Section -->
+        <div class="profile-section">
             <div class="profile-header">
-                <h2 class="profile-title">HỒ SƠ CÁ NHÂN</h2>
-                <button class="close-profile" id="closeProfile">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="profile-avatar">U</div>
+                <div class="profile-info">
+                    <h2 id="profileUsername">Username</h2>
+                    <p>Thành viên từ: <span id="joinDate">01/01/2023</span></p>
+                </div>
             </div>
             
-            <div class="profile-info">
-                <div class="profile-item">
-                    <span class="profile-label">Tên đăng nhập:</span>
-                    <span class="profile-value" id="profileUsername">user123</span>
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="statBalance">10,000</div>
+                    <div class="stat-label">Số dư coin</div>
                 </div>
-                <div class="profile-item">
-                    <span class="profile-label">Email:</span>
-                    <span class="profile-value" id="profileEmail">user@example.com</span>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="statTools">2</div>
+                    <div class="stat-label">Tool đang thuê</div>
                 </div>
-                <div class="profile-item">
-                    <span class="profile-label">Số dư:</span>
-                    <span class="profile-value" id="profileBalance">10,000 coin</span>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="statWinRate">75%</div>
+                    <div class="stat-label">Tỷ lệ thắng</div>
                 </div>
-                <div class="profile-item">
-                    <span class="profile-label">Ngày tham gia:</span>
-                    <span class="profile-value" id="profileJoinDate">01/01/2023</span>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="statGames">150</div>
+                    <div class="stat-label">Số ván đã chơi</div>
                 </div>
             </div>
             
             <div class="profile-actions">
-                <button class="profile-btn profile-edit" id="profileEditBtn">CHỈNH SỬA</button>
-                <button class="profile-btn profile-save" id="profileSaveBtn">LƯU</button>
-                <button class="profile-btn profile-cancel" id="profileCancelBtn">HỦY</button>
+                <button class="profile-btn change-password-btn">Đổi mật khẩu</button>
+                <button class="profile-btn edit-profile-btn">Chỉnh sửa hồ sơ</button>
+                <button class="profile-btn lucky-draw-btn" id="luckyDrawBtn">Rút thăm may mắn</button>
             </div>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <h2 class="admin-title">Admin Panel</h2>
+            
+            <div class="admin-tabs">
+                <div class="admin-tab active" data-tab="users">Quản lý Users</div>
+                <div class="admin-tab" data-tab="transactions">Lịch sử giao dịch</div>
+                <div class="admin-tab" data-tab="settings">Cài đặt hệ thống</div>
+            </div>
+            
+            <div class="admin-content active" id="usersContent">
+                <h3>Danh sách người dùng</h3>
+                <ul class="user-list" id="userList">
+                    <li class="user-item">
+                        <div class="user-details">
+                            <div class="user-avatar">U1</div>
+                            <div>
+                                <div>user1</div>
+                                <div>5,000 coin</div>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <button class="add-money-btn">Cộng tiền</button>
+                            <button class="remove-user-btn">Xóa</button>
+                        </div>
+                    </li>
+                    
+                    <li class="user-item">
+                        <div class="user-details">
+                            <div class="user-avatar">U2</div>
+                            <div>
+                                <div>user2</div>
+                                <div>15,000 coin</div>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <button class="add-money-btn">Cộng tiền</button>
+                            <button class="remove-user-btn">Xóa</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="admin-content" id="transactionsContent">
+                <h3>Lịch sử giao dịch</h3>
+                <table class="transaction-history">
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>User</th>
+                            <th>Loại giao dịch</th>
+                            <th>Số tiền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10:30 20/05/2023</td>
+                            <td>user1</td>
+                            <td>Nạp tiền</td>
+                            <td>50,000 coin</td>
+                            <td>Thành công</td>
+                        </tr>
+                        <tr>
+                            <td>11:45 20/05/2023</td>
+                            <td>user2</td>
+                            <td>Thuê tool</td>
+                            <td>10,000 coin</td>
+                            <td>Thành công</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="admin-content" id="settingsContent">
+                <h3>Cài đặt hệ thống</h3>
+                <div class="input-group">
+                    <label for="systemName">Tên hệ thống</label>
+                    <input type="text" id="systemName" value="Bevis Tool TX">
+                </div>
+                
+                <div class="input-group">
+                    <label for="maintenanceMode">Chế độ bảo trì</label>
+                    <select id="maintenanceMode">
+                        <option value="off">Tắt</option>
+                        <option value="on">Bật</option>
+                    </select>
+                </div>
+                
+                <button class="submit-btn">Lưu cài đặt</button>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2023 Bevis Tool TX. Tất cả quyền được bảo lưu.</p>
         </div>
     </div>
     
-    <!-- Music Player -->
-    <div class="music-player">
-        <div class="music-control" id="playPauseBtn">
-            <i class="fas fa-play"></i>
-        </div>
-        <div class="music-info">
-            <div class="music-title">Bevis Theme</div>
-            <div class="music-artist">Bevis Team</div>
+    <!-- Lucky Draw Modal -->
+    <div class="lucky-draw-modal" id="luckyDrawModal">
+        <div class="lucky-draw-content">
+            <h2 class="lucky-draw-title">Rút thăm may mắn</h2>
+            
+            <div class="lucky-draw-box" id="luckyDrawBox">
+                <span>?</span>
+            </div>
+            
+            <button class="lucky-draw-btn" id="drawButton">Rút thăm</button>
+            
+            <div class="lucky-draw-result" id="drawResult">
+                Bấm nút "Rút thăm" để nhận phần thưởng!
+            </div>
+            
+            <button class="close-modal" id="closeDrawModal">Đóng</button>
         </div>
     </div>
-
+    
+    <!-- Sound Toggle -->
+    <div class="sound-on" id="soundToggle">
+        <i class="fas fa-volume-up"></i>
+    </div>
+    
     <script>
-        // DOM Elements
-        const loginPage = document.getElementById('loginPage');
-        const appContainer = document.getElementById('appContainer');
-        const loginBtn = document.getElementById('loginBtn');
-        const registerLink = document.getElementById('registerLink');
-        const registerModal = document.getElementById('registerModal');
-        const closeRegister = document.getElementById('closeRegister');
-        const registerBtn = document.getElementById('registerBtn');
-        const missionContainer = document.getElementById('missionContainer');
-        const missionBtn = document.getElementById('missionBtn');
-        const checkBtn = document.getElementById('checkBtn');
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const toolBtns = document.querySelectorAll('.tool-btn');
-        const toolContainers = document.querySelectorAll('.tool-container');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const predictBtn = document.getElementById('predictBtn');
-        const v4Result = document.getElementById('v4Result');
-        const v5Result = document.getElementById('v5Result');
-        const v4Prediction = document.getElementById('v4Prediction');
-        const v5Prediction = document.getElementById('v5Prediction');
-        const v4Probability = document.getElementById('v4Probability');
-        const v5Probability = document.getElementById('v5Probability');
-        const notification = document.getElementById('notification');
-        const closeNotification = document.getElementById('closeNotification');
-        const notificationConfirm = document.getElementById('notificationConfirm');
-        const notificationCancel = document.getElementById('notificationCancel');
-        const notificationTitle = document.getElementById('notificationTitle');
-        const notificationContent = document.getElementById('notificationContent');
-        const paymentBtn = document.getElementById('paymentBtn');
-        const paymentModal = document.getElementById('paymentModal');
-        const closePayment = document.getElementById('closePayment');
-        const profileBtn = document.getElementById('profileBtn');
-        const profileModal = document.getElementById('profileModal');
-        const closeProfile = document.getElementById('closeProfile');
-        const profileEditBtn = document.getElementById('profileEditBtn');
-        const profileSaveBtn = document.getElementById('profileSaveBtn');
-        const profileCancelBtn = document.getElementById('profileCancelBtn');
-        const drawBtn = document.getElementById('drawBtn');
-        const drawResult = document.getElementById('drawResult');
-        const drawAmount = document.getElementById('drawAmount');
-        const wheel = document.getElementById('wheel');
-        const botMessages = document.getElementById('botMessages');
-        const messageInput = document.getElementById('messageInput');
-        const sendMessageBtn = document.getElementById('sendMessageBtn');
-        const adminBtn = document.getElementById('adminBtn');
-        const adminPanel = document.getElementById('adminPanel');
-        const addCoinBtn = document.getElementById('addCoinBtn');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const userBalance = document.getElementById('userBalance');
-        const userAvatar = document.getElementById('userAvatar');
-        
-        // App State
-        let currentUser = null;
-        let isPlaying = false;
-        let audioContext = null;
-        let currentToolCost = 10000;
-        let userData = {
-            'leduc': { password: 'bevis', balance: 1000000, isAdmin: true },
-            'user1': { password: 'password1', balance: 50000, isAdmin: false }
-        };
-        
-        // Initialize particles
-        function initParticles() {
-            const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 10 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.top = `${Math.random() * 100}vh`;
-                
-                const duration = Math.random() * 20 + 10;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `-${Math.random() * 20}s`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-        
-        // Play click sound
-        function playClickSound() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const authContainer = document.getElementById('authContainer');
+            const appContainer = document.getElementById('appContainer');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const toolCards = document.querySelectorAll('.tool-card');
+            const toolContainers = document.querySelectorAll('.tool-container');
+            const analyzeV4Btn = document.getElementById('analyzeV4');
+            const analyzeV5Btn = document.getElementById('analyzeV5');
+            const resultV4 = document.getElementById('resultV4');
+            const resultV5 = document.getElementById('resultV5');
+            const luckyDrawBtn = document.getElementById('luckyDrawBtn');
+            const luckyDrawModal = document.getElementById('luckyDrawModal');
+            const drawButton = document.getElementById('drawButton');
+            const closeDrawModal = document.getElementById('closeDrawModal');
+            const luckyDrawBox = document.getElementById('luckyDrawBox');
+            const drawResult = document.getElementById('drawResult');
+            const soundToggle = document.getElementById('soundToggle');
             
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Admin elements
+            const adminPanel = document.getElementById('adminPanel');
+            const adminTabs = document.querySelectorAll('.admin-tab');
+            const adminContents = document.querySelectorAll('.admin-content');
             
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            // Sound effects
+            const clickSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+            const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+            const coinSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
             
-            oscillator.type = 'sine';
-            oscillator.frequency.value = 800;
-            gainNode.gain.value = 0.1;
+            let soundEnabled = true;
             
-            oscillator.start();
-            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.1);
-            
-            setTimeout(() => {
-                oscillator.stop();
-            }, 100);
-        }
-        
-        // Show notification
-        function showNotification(title, content, confirmCallback = null, cancelCallback = null) {
-            notificationTitle.textContent = title;
-            notificationContent.textContent = content;
-            notification.style.display = 'block';
-            
-            if (confirmCallback) {
-                notificationConfirm.onclick = confirmCallback;
-                notificationConfirm.style.display = 'inline-block';
-            } else {
-                notificationConfirm.style.display = 'none';
-            }
-            
-            if (cancelCallback) {
-                notificationCancel.onclick = cancelCallback;
-                notificationCancel.style.display = 'inline-block';
-            } else {
-                notificationCancel.style.display = 'none';
-            }
-        }
-        
-        // Hide notification
-        function hideNotification() {
-            notification.style.display = 'none';
-        }
-        
-        // Update user balance display
-        function updateBalanceDisplay() {
-            if (currentUser && userData[currentUser]) {
-                userBalance.textContent = `${userData[currentUser].balance.toLocaleString()} coin`;
-            }
-        }
-        
-        // Check if user can afford tool
-        function canAffordTool() {
-            if (!currentUser || !userData[currentUser]) return false;
-            return userData[currentUser].balance >= currentToolCost;
-        }
-        
-        // Deduct tool cost
-        function deductToolCost() {
-            if (currentUser && userData[currentUser]) {
-                userData[currentUser].balance -= currentToolCost;
-                updateBalanceDisplay();
-                
-                // Show notification about deduction
-                showNotification(
-                    'THÔNG BÁO', 
-                    `Bạn đã bị trừ ${currentToolCost.toLocaleString()} coin để sử dụng công cụ. Số dư còn lại: ${userData[currentUser].balance.toLocaleString()} coin.`
-                );
-            }
-        }
-        
-        // Add message to chat
-        function addMessage(message, isUser = false) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            
-            const messageContent = document.createElement('div');
-            messageContent.classList.add(isUser ? 'user-message' : 'bot-message');
-            messageContent.textContent = message;
-            
-            const messageTime = document.createElement('div');
-            messageTime.classList.add('message-time');
-            const now = new Date();
-            messageTime.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-            
-            messageContent.appendChild(messageTime);
-            messageElement.appendChild(messageContent);
-            botMessages.appendChild(messageElement);
-            
-            // Scroll to bottom
-            botMessages.scrollTop = botMessages.scrollHeight;
-        }
-        
-        // Analyze dice for Tool V4
-        function analyzeDiceV4(diceValues) {
-            // Simple analysis based on dice values
-            const sum = diceValues.reduce((a, b) => a + b, 0);
-            const isTai = sum > 10;
-            
-            // Generate patterns based on previous results (simulated)
-            const patterns = [
-                { pattern: 'TÀI - XỈU - XỈU', probability: 75 },
-                { pattern: 'TÀI - TÀI - TÀI', probability: 65 },
-                { pattern: 'TÀI - XỈU - TÀI', probability: 80 },
-                { pattern: 'XỈU - XỈU - TÀI', probability: 70 },
-                { pattern: 'XỈU - TÀI - TÀI', probability: 60 }
-            ];
-            
-            // Sort by probability and take top 2
-            patterns.sort((a, b) => b.probability - a.probability);
-            const topPatterns = patterns.slice(0, 2);
-            
-            // Build result HTML
-            let resultHTML = `
-                <p>Kết quả hiện tại: <span class="${isTai ? 'tai' : 'xiu'}">${isTai ? 'TÀI' : 'XỈU'}</span></p>
-                <p>Dự đoán ván tiếp theo có thể theo các cầu sau:</p>
-            `;
-            
-            topPatterns.forEach((pattern, index) => {
-                resultHTML += `
-                    <div class="probability-item">
-                        <span>Cầu ${index + 1}: ${pattern.pattern}</span>
-                        <span>${pattern.probability}%</span>
-                    </div>
-                    <div class="probability-bar">
-                        <div class="probability-fill" style="width: ${pattern.probability}%"></div>
-                    </div>
-                `;
-            });
-            
-            resultHTML += `<p>Khuyến nghị: <strong>${topPatterns[0].pattern.split(' - ')[2]}</strong></p>`;
-            
-            return resultHTML;
-        }
-        
-        // Predict dice for Tool V5
-        function predictDiceV5(diceValues) {
-            // Simple prediction based on dice values
-            const sum = diceValues.reduce((a, b) => a + b, 0);
-            const isTai = sum > 10;
-            
-            // Generate prediction with some probability
-            const winProbability = Math.floor(Math.random() * 51) + 50; // 50-100%
-            
-            // Predict next dice values (simple algorithm)
-            const nextDice = diceValues.map(value => {
-                // Simple prediction: add 1-3, wrap around if > 6
-                const nextValue = (value + Math.floor(Math.random() * 3) + 1) % 6;
-                return nextValue === 0 ? 6 : nextValue;
-            });
-            
-            const nextSum = nextDice.reduce((a, b) => a + b, 0);
-            const nextIsTai = nextSum > 10;
-            
-            // Build result HTML
-            let resultHTML = `
-                <p>Kết quả người dùng: ${diceValues.join('-')}</p>
-                <p>Kết quả ván sau: <span class="${nextIsTai ? 'tai' : 'xiu'}">${nextIsTai ? 'TÀI' : 'XỈU'}</span></p>
-                <p>Xí ngầu dự đoán: ${nextDice.join('-')}</p>
-                <p>Xác suất thắng: ${winProbability}%</p>
-            `;
-            
-            return resultHTML;
-        }
-        
-        // Handle lucky draw
-        function handleLuckyDraw() {
-            // Rotate wheel
-            const rotations = 3 + Math.random() * 5; // 3-8 rotations
-            const degrees = rotations * 360;
-            wheel.style.transform = `rotate(${degrees}deg)`;
-            
-            // Calculate prize (between 1000 and 30000)
-            const prize = Math.floor(Math.random() * 29000) + 1000;
-            
-            // Show result after animation
-            setTimeout(() => {
-                drawAmount.textContent = `${prize.toLocaleString()} coin`;
-                drawResult.style.display = 'block';
-                
-                // Add prize to user balance (after 24h in real scenario)
-                if (currentUser && userData[currentUser]) {
-                    // For demo, add immediately
-                    userData[currentUser].balance += prize;
-                    updateBalanceDisplay();
-                    
-                    addMessage(`Chúc mừng! Bạn đã nhận được ${prize.toLocaleString()} coin từ rút thăm may mắn.`);
+            // Play sound function
+            function playSound(sound) {
+                if (soundEnabled) {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log("Audio play failed:", e));
                 }
-            }, 3000);
-        }
-        
-        // Event Listeners
-        loginBtn.addEventListener('click', () => {
-            playClickSound();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (username === 'leduc' && password === 'bevis') {
-                currentUser = username;
-                loginPage.style.display = 'none';
-                appContainer.style.display = 'block';
-                document.body.classList.add('admin-mode');
-                updateBalanceDisplay();
-                userAvatar.textContent = username.substring(0, 2).toUpperCase();
-                addMessage(`Xin chào Admin ${username}! Tôi có thể giúp gì cho bạn?`);
-            } else if (userData[username] && userData[username].password === password) {
-                currentUser = username;
-                loginPage.style.display = 'none';
-                appContainer.style.display = 'block';
-                updateBalanceDisplay();
-                userAvatar.textContent = username.substring(0, 2).toUpperCase();
-                addMessage(`Xin chào ${username}! Tôi có thể giúp gì cho bạn?`);
-            } else {
-                showNotification('LỖI', 'Tên đăng nhập hoặc mật khẩu không đúng.');
-            }
-        });
-        
-        registerLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            playClickSound();
-            registerModal.style.display = 'flex';
-        });
-        
-        closeRegister.addEventListener('click', () => {
-            playClickSound();
-            registerModal.style.display = 'none';
-        });
-        
-        registerBtn.addEventListener('click', () => {
-            playClickSound();
-            const username = document.getElementById('regUsername').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            
-            if (!username || !password || !confirmPassword) {
-                showNotification('LỖI', 'Vui lòng điền đầy đủ thông tin.');
-                return;
             }
             
-            if (password !== confirmPassword) {
-                showNotification('LỖI', 'Mật khẩu xác nhận không khớp.');
-                return;
-            }
-            
-            if (userData[username]) {
-                showNotification('LỖI', 'Tên đăng nhập đã tồn tại.');
-                return;
-            }
-            
-            // Add new user
-            userData[username] = {
-                password: password,
-                balance: 0,
-                isAdmin: false
-            };
-            
-            showNotification('THÀNH CÔNG', 'Đăng ký tài khoản thành công. Vui lòng đăng nhập.');
-            registerModal.style.display = 'none';
-        });
-        
-        missionBtn.addEventListener('click', () => {
-            playClickSound();
-            showNotification('THÔNG BÁO', 'Bạn đã hoàn thành nhiệm vụ. Vui lòng chờ xác nhận.');
-        });
-        
-        checkBtn.addEventListener('click', () => {
-            playClickSound();
-            showNotification('THÔNG BÁO', 'Hệ thống đang kiểm tra nhiệm vụ của bạn...');
-        });
-        
-        menuToggle.addEventListener('click', () => {
-            playClickSound();
-            sidebar.classList.add('open');
-        });
-        
-        closeSidebar.addEventListener('click', () => {
-            playClickSound();
-            sidebar.classList.remove('open');
-        });
-        
-        logoutBtn.addEventListener('click', () => {
-            playClickSound();
-            currentUser = null;
-            appContainer.style.display = 'none';
-            loginPage.style.display = 'flex';
-            document.body.classList.remove('admin-mode');
-        });
-        
-        toolBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                playClickSound();
-                const tool = btn.getAttribute('data-tool');
-                
-                // Update active button
-                toolBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Update active container
-                toolContainers.forEach(container => container.classList.remove('active'));
-                document.getElementById(tool).classList.add('active');
-                
-                // Update sidebar active item
-                document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
-                document.querySelector(`.sidebar-menu a[data-tool="${tool}"]`).classList.add('active');
+            // Toggle sound
+            soundToggle.addEventListener('click', function() {
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                } else {
+                    soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                }
+                playSound(clickSound);
             });
-        });
-        
-        analyzeBtn.addEventListener('click', () => {
-            playClickSound();
             
-            if (!canAffordTool()) {
-                showNotification(
-                    'LỖI', 
-                    `Bạn không đủ coin để sử dụng công cụ này. Cần ${currentToolCost.toLocaleString()} coin.`,
-                    () => {
-                        paymentModal.style.display = 'flex';
-                        hideNotification();
-                    }
-                );
-                return;
-            }
+            // Auth tabs
+            loginTab.addEventListener('click', function() {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                playSound(clickSound);
+            });
             
-            const diceInput = document.getElementById('diceInput').value;
-            const diceValues = diceInput.split(' ').map(val => parseInt(val.trim())).filter(val => !isNaN(val) && val >= 1 && val <= 6);
+            registerTab.addEventListener('click', function() {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                playSound(clickSound);
+            });
             
-            if (diceValues.length !== 3) {
-                showNotification('LỖI', 'Vui lòng nhập 3 số xí ngầu hợp lệ (từ 1 đến 6), cách nhau bằng khoảng trắng.');
-                return;
-            }
-            
-            // Deduct tool cost
-            deductToolCost();
-            
-            // Analyze and show result
-            v4Probability.innerHTML = analyzeDiceV4(diceValues);
-            v4Result.style.display = 'block';
-            
-            // Add message to chat
-            addMessage(`Đã phân tích xí ngầu: ${diceValues.join('-')}. Kết quả: ${diceValues.reduce((a, b) => a + b, 0) > 10 ? 'TÀI' : 'XỈU'}`);
-            addMessage(`Đề xuất: ${v4Probability.querySelector('strong').textContent}`);
-        });
-        
-        predictBtn.addEventListener('click', () => {
-            playClickSound();
-            
-            if (!canAffordTool()) {
-                showNotification(
-                    'LỖI', 
-                    `Bạn không đủ coin để sử dụng công cụ này. Cần ${currentToolCost.toLocaleString()} coin.`,
-                    () => {
-                        paymentModal.style.display = 'flex';
-                        hideNotification();
-                    }
-                );
-                return;
-            }
-            
-            const diceInput = document.getElementById('diceInputV5').value;
-            const diceValues = diceInput.split(' ').map(val => parseInt(val.trim())).filter(val => !isNaN(val) && val >= 1 && val <= 6);
-            
-            if (diceValues.length !== 3) {
-                showNotification('LỖI', 'Vui lòng nhập 3 số xí ngầu hợp lệ (từ 1 đến 6), cách nhau bằng khoảng trắng.');
-                return;
-            }
-            
-            // Deduct tool cost
-            deductToolCost();
-            
-            // Predict and show result
-            v5Probability.innerHTML = predictDiceV5(diceValues);
-            v5Result.style.display = 'block';
-            
-            // Add message to chat
-            addMessage(`Đã dự đoán xí ngầu: ${diceValues.join('-')}.`);
-            addMessage(`Kết quả dự đoán: ${v5Probability.querySelector('span').textContent}`);
-        });
-        
-        closeNotification.addEventListener('click', hideNotification);
-        
-        notificationCancel.addEventListener('click', hideNotification);
-        
-        paymentBtn.addEventListener('click', () => {
-            playClickSound();
-            paymentModal.style.display = 'flex';
-        });
-        
-        closePayment.addEventListener('click', () => {
-            playClickSound();
-            paymentModal.style.display = 'none';
-        });
-        
-        profileBtn.addEventListener('click', () => {
-            playClickSound();
-            
-            if (currentUser && userData[currentUser]) {
-                document.getElementById('profileUsername').textContent = currentUser;
-                document.getElementById('profileBalance').textContent = `${userData[currentUser].balance.toLocaleString()} coin`;
+            // Login form
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = this.querySelector('input[type="text"]').value;
+                const password = this.querySelector('input[type="password"]').value;
                 
-                // Set mock data for demo
-                document.getElementById('profileEmail').textContent = `${currentUser}@example.com`;
-                document.getElementById('profileJoinDate').textContent = '01/01/2023';
-            }
-            
-            profileModal.style.display = 'flex';
-        });
-        
-        closeProfile.addEventListener('click', () => {
-            playClickSound();
-            profileModal.style.display = 'none';
-        });
-        
-        profileEditBtn.addEventListener('click', () => {
-            playClickSound();
-            profileEditBtn.style.display = 'none';
-            profileSaveBtn.style.display = 'inline-block';
-            profileCancelBtn.style.display = 'inline-block';
-            
-            // Make fields editable (for demo, only email)
-            document.getElementById('profileEmail').contentEditable = true;
-            document.getElementById('profileEmail').style.borderBottom = '1px dashed var(--primary-color)';
-        });
-        
-        profileSaveBtn.addEventListener('click', () => {
-            playClickSound();
-            profileEditBtn.style.display = 'inline-block';
-            profileSaveBtn.style.display = 'none';
-            profileCancelBtn.style.display = 'none';
-            
-            // Save changes (for demo, only email)
-            document.getElementById('profileEmail').contentEditable = false;
-            document.getElementById('profileEmail').style.borderBottom = 'none';
-            
-            showNotification('THÀNH CÔNG', 'Thông tin đã được cập nhật.');
-        });
-        
-        profileCancelBtn.addEventListener('click', () => {
-            playClickSound();
-            profileEditBtn.style.display = 'inline-block';
-            profileSaveBtn.style.display = 'none';
-            profileCancelBtn.style.display = 'none';
-            
-            // Revert changes
-            document.getElementById('profileEmail').contentEditable = false;
-            document.getElementById('profileEmail').style.borderBottom = 'none';
-            document.getElementById('profileEmail').textContent = `${currentUser}@example.com`;
-        });
-        
-        drawBtn.addEventListener('click', () => {
-            playClickSound();
-            handleLuckyDraw();
-        });
-        
-        sendMessageBtn.addEventListener('click', () => {
-            if (messageInput.value.trim() !== '') {
-                addMessage(messageInput.value, true);
+                // Check if admin
+                if (username === 'leduc' && password === 'bevis') {
+                    document.body.classList.add('admin-mode');
+                    playSound(successSound);
+                } else {
+                    // Regular user login
+                    playSound(successSound);
+                }
                 
-                // Simulate bot response after a short delay
+                authContainer.style.display = 'none';
+                appContainer.style.display = 'block';
+                
+                // Update user info
+                document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
+                document.getElementById('profileUsername').textContent = username;
+                document.getElementById('statBalance').textContent = '10,000';
+            });
+            
+            // Register form
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = this.querySelector('input[type="text"]').value;
+                const password = this.querySelector('input[type="password"]').value;
+                const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+                
+                if (password !== confirmPassword) {
+                    alert('Mật khẩu xác nhận không khớp!');
+                    return;
+                }
+                
+                playSound(successSound);
+                
+                // Switch to login tab
+                loginTab.click();
+                
+                // Pre-fill login form
+                loginForm.querySelector('input[type="text"]').value = username;
+                loginForm.querySelector('input[type="password"]').value = password;
+            });
+            
+            // Sidebar toggle
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.add('open');
+                playSound(clickSound);
+            });
+            
+            closeSidebar.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                playSound(clickSound);
+            });
+            
+            // Logout
+            logoutBtn.addEventListener('click', function() {
+                authContainer.style.display = 'flex';
+                appContainer.style.display = 'none';
+                document.body.classList.remove('admin-mode');
+                playSound(clickSound);
+            });
+            
+            // Tool cards
+            toolCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const toolId = this.getAttribute('data-tool');
+                    
+                    // Hide all tool containers
+                    toolContainers.forEach(container => {
+                        container.classList.remove('active');
+                    });
+                    
+                    // Show selected tool container
+                    document.getElementById(toolId).classList.add('active');
+                    
+                    playSound(clickSound);
+                });
+            });
+            
+            // Analyze V4
+            analyzeV4Btn.addEventListener('click', function() {
+                const diceInput = document.getElementById('diceInputV4').value;
+                const diceValues = diceInput.split(' ').map(Number);
+                
+                if (diceValues.length !== 3 || diceValues.some(isNaN)) {
+                    alert('Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng.');
+                    return;
+                }
+                
+                // Calculate sum and determine Tai/Xiu
+                const sum = diceValues.reduce((a, b) => a + b, 0);
+                const isTai = sum >= 11;
+                
+                // Update prediction
+                const predictionElement = document.getElementById('predictionV4');
+                predictionElement.textContent = `Kết quả: ${diceValues.join('-')} | ${isTai ? 'TÀI' : 'XỈU'} (Tổng: ${sum})`;
+                predictionElement.className = `prediction ${isTai ? 'tai' : 'xiu'}`;
+                
+                // Show result
+                resultV4.style.display = 'block';
+                
+                playSound(successSound);
+            });
+            
+            // Analyze V5
+            analyzeV5Btn.addEventListener('click', function() {
+                const diceInput = document.getElementById('diceInputV5').value;
+                const diceValues = diceInput.split(' ').map(Number);
+                
+                if (diceValues.length !== 3 || diceValues.some(isNaN)) {
+                    alert('Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng.');
+                    return;
+                }
+                
+                // Calculate sum and determine Tai/Xiu
+                const sum = diceValues.reduce((a, b) => a + b, 0);
+                const isTai = sum >= 11;
+                
+                // Update user result
+                document.getElementById('userResultV5').textContent = diceValues.join('-');
+                
+                // Generate prediction (for demo purposes)
+                const nextIsTai = Math.random() > 0.5;
+                document.getElementById('nextResultV5').textContent = nextIsTai ? 'TÀI' : 'XỈU';
+                document.getElementById('nextResultV5').className = nextIsTai ? 'tai' : 'xiu';
+                
+                // Generate predicted dice
+                const predictedDice = nextIsTai 
+                    ? [4, 5, 6] 
+                    : [1, 2, 3];
+                document.getElementById('predictedDiceV5').textContent = predictedDice.join('-');
+                
+                // Generate win probability
+                const winProbability = Math.floor(Math.random() * 50) + 50; // 50-100%
+                document.getElementById('winProbabilityV5').textContent = `${winProbability}%`;
+                document.getElementById('winProbabilityV5').className = winProbability >= 70 ? 'tai' : 'xiu';
+                
+                // Show result
+                resultV5.style.display = 'block';
+                
+                playSound(successSound);
+            });
+            
+            // Lucky draw
+            luckyDrawBtn.addEventListener('click', function() {
+                luckyDrawModal.style.display = 'flex';
+                playSound(clickSound);
+            });
+            
+            closeDrawModal.addEventListener('click', function() {
+                luckyDrawModal.style.display = 'none';
+                playSound(clickSound);
+            });
+            
+            drawButton.addEventListener('click', function() {
+                // Animate the draw
+                luckyDrawBox.style.animation = 'pulse 0.5s infinite';
+                
                 setTimeout(() => {
-                    addMessage('Cảm ơn bạn đã liên hệ. Tôi sẽ hỗ trợ bạn trong thời gian sớm nhất.');
-                }, 1000);
-                
-                messageInput.value = '';
-            }
-        });
-        
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessageBtn.click();
-            }
-        });
-        
-        adminBtn.addEventListener('click', () => {
-            playClickSound();
-            adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
-        });
-        
-        addCoinBtn.addEventListener('click', () => {
-            playClickSound();
-            const username = document.getElementById('adminUsername').value;
-            const amount = parseInt(document.getElementById('adminAmount').value);
+                    luckyDrawBox.style.animation = 'none';
+                    
+                    // Generate random reward
+                    const rewards = [1000, 5000, 10000, 15000, 20000, 25000, 30000];
+                    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+                    
+                    // Update box and result
+                    luckyDrawBox.innerHTML = `<span>${randomReward.toLocaleString()}</span>`;
+                    drawResult.innerHTML = `Chúc mừng! Bạn nhận được <span class="tai">${randomReward.toLocaleString()} coin</span>!`;
+                    
+                    playSound(coinSound);
+                    
+                    // Update user balance
+                    const currentBalance = parseInt(document.getElementById('statBalance').textContent.replace(/,/g, ''));
+                    document.getElementById('statBalance').textContent = (currentBalance + randomReward).toLocaleString();
+                    document.getElementById('userBalance').textContent = (currentBalance + randomReward).toLocaleString() + ' coin';
+                }, 2000);
+            });
             
-            if (!username || !amount) {
-                showNotification('LỖI', 'Vui lòng nhập tên người dùng và số coin.');
-                return;
-            }
+            // Admin tabs
+            adminTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    adminTabs.forEach(t => t.classList.remove('active'));
+                    adminContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to current tab and content
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}Content`).classList.add('active');
+                    
+                    playSound(clickSound);
+                });
+            });
             
-            if (!userData[username]) {
-                showNotification('LỖI', 'Người dùng không tồn tại.');
-                return;
-            }
+            // Add money buttons
+            const addMoneyButtons = document.querySelectorAll('.add-money-btn');
+            addMoneyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const amount = prompt('Nhập số tiền muốn cộng:');
+                    if (amount && !isNaN(amount)) {
+                        alert(`Đã cộng ${amount} coin cho user!`);
+                        playSound(coinSound);
+                    }
+                });
+            });
             
-            userData[username].balance += amount;
-            showNotification('THÀNH CÔNG', `Đã thêm ${amount.toLocaleString()} coin cho ${username}.`);
-            
-            // Update balance display if current user is the one receiving coins
-            if (currentUser === username) {
-                updateBalanceDisplay();
-            }
+            // Simulate initial user login for demo
+            setTimeout(() => {
+                loginForm.querySelector('input[type="text"]').value = 'leduc';
+                loginForm.querySelector('input[type="password"]').value = 'bevis';
+            }, 1000);
         });
-        
-        playPauseBtn.addEventListener('click', () => {
-            playClickSound();
-            isPlaying = !isPlaying;
-            playPauseBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-        });
-        
-        // Initialize the app
-        initParticles();
-        
-        // Demo: Add some initial chat messages
-        setTimeout(() => {
-            addMessage('Tôi có thể giúp bạn phân tích xác suất xí ngầu và dự đoán kết quả.');
-        }, 2000);
-        
-        setTimeout(() => {
-            addMessage('Hãy thử sử dụng Tool V4 hoặc Tool V5 để trải nghiệm tính năng mới!');
-        }, 4000);
     </script>
 </body>
 </html>
