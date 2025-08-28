@@ -1,0 +1,2378 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bevis Tool Tx - Home Side</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #9c27b0;
+            --secondary-color: #673ab7;
+            --accent-color: #e91e63;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-color: #ffffff;
+            --panel-bg: rgba(40, 40, 40, 0.85);
+            --glass-effect: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+            filter: blur(8px) brightness(0.7);
+        }
+        
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(50, 0, 50, 0.8) 100%);
+            z-index: -1;
+        }
+        
+        /* Disable right click and devtools */
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .login-box {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: all 0.5s ease;
+        }
+        
+        .login-box:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
+            box-shadow: 0 15px 35px rgba(156, 39, 176, 0.3);
+        }
+        
+        .login-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: var(--darker-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .login-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background-color: #8e24aa;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .register-link {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .mission-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .mission-text {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .mission-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .mission-btn:hover {
+            background-color: #d81b60;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+        
+        .check-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .check-btn:hover {
+            background-color: #5e35b1;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3);
+        }
+        
+        /* Main App */
+        .app-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .user-balance {
+            background-color: var(--darker-bg);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-title {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        
+        .close-sidebar {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .admin-only {
+            display: none;
+        }
+        
+        .admin-mode .admin-only {
+            display: block;
+        }
+        
+        .tool-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-btn {
+            padding: 12px 25px;
+            background-color: var(--darker-bg);
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(156, 39, 176, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .tool-btn:hover::before {
+            left: 100%;
+        }
+        
+        .tool-btn.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .tool-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .tool-container {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            transition: all 0.5s ease;
+        }
+        
+        .tool-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tool-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input[type="number"], input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--darker-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input[type="number"]:focus, input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .submit-btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .submit-btn:hover {
+            background-color: #8e24aa;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--darker-bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .result-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .prediction {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .tai {
+            color: #4CAF50;
+            text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        
+        .xiu {
+            color: #F44336;
+            text-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+        }
+        
+        .dice-probability {
+            margin-top: 15px;
+        }
+        
+        .probability-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .probability-bar {
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .action-btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        .check-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .history-btn {
+            background-color: #673AB7;
+            color: white;
+        }
+        
+        .new-game-btn {
+            background-color: #FF9800;
+            color: black;
+        }
+        
+        .back-btn {
+            background-color: #9E9E9E;
+            color: black;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .history-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .history-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .history-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .close-history {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-table th {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--primary-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        .history-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .correct {
+            color: #4CAF50;
+        }
+        
+        .incorrect {
+            color: #F44336;
+        }
+        
+        /* Bot Container */
+        .bot-container {
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bot-header {
+            background-color: var(--darker-bg);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .bot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .bot-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .bot-status {
+            margin-left: auto;
+            font-size: 12px;
+            color: #9c27b0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .bot-status::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9c27b0;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .bot-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--darker-bg);
+        }
+        
+        .bot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .bot-messages::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+        
+        .bot-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 6px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            animation: messageFadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes messageFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            background-color: rgba(156, 39, 176, 0.1);
+            padding: 12px 18px;
+            border-radius: 0 18px 18px 18px;
+            max-width: 80%;
+            border: 1px solid rgba(156, 39, 176, 0.2);
+            position: relative;
+        }
+        
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: rgba(156, 39, 176, 0.1);
+            border-left: 0;
+            margin-top: 0;
+        }
+        
+        .user-message {
+            margin-left: auto;
+            background-color: rgba(103, 58, 183, 0.1);
+            padding: 12px 18px;
+            border-radius: 18px 0 18px 18px;
+            max-width: 80%;
+            border: 1px solid rgba(103, 58, 183, 0.2);
+            position: relative;
+        }
+        
+        .user-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: rgba(103, 58, 183, 0.1);
+            border-right: 0;
+            margin-top: 0;
+        }
+        
+        .message-time {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .message-input-container {
+            display: flex;
+            padding: 15px;
+            background-color: var(--darker-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .message-input {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--dark-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .send-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .send-btn:hover {
+            background-color: #8e24aa;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            z-index: 1001;
+            animation: slideInRight 0.5s ease-in-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .notification-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .close-notification {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+        
+        .notification-content {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .notification-footer {
+            text-align: center;
+        }
+        
+        .notification-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        /* Payment Modal */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .payment-content {
+            background-color: var(--darker-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        .payment-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .payment-info {
+            background-color: var(--dark-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .payment-note {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .close-payment {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+        }
+        
+        .music-control {
+            background-color: var(--primary-color);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+        
+        .music-info {
+            padding-right: 10px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .music-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .music-artist {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Cursor Effects */
+        .cursor-effect {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(156, 39, 176, 0.5);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            mix-blend-mode: screen;
+            animation: cursorPulse 1.5s infinite;
+            display: none;
+        }
+        
+        @keyframes cursorPulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+        
+        /* Timer */
+        .timer {
+            background-color: var(--darker-bg);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+            margin-left: 15px;
+        }
+        
+        /* Profile Page */
+        .profile-container {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .profile-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .profile-role {
+            font-size: 14px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background-color: var(--darker-bg);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .profile-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .profile-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        
+        .profile-menu {
+            list-style: none;
+            background-color: var(--darker-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-menu li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-menu li:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-menu a {
+            display: block;
+            padding: 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .profile-menu a:hover {
+            background-color: rgba(156, 39, 176, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .profile-menu a.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .profile-main {
+            flex: 1;
+        }
+        
+        .profile-section {
+            background-color: var(--darker-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--dark-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        
+        .save-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .history-chart {
+            height: 200px;
+            background-color: var(--dark-bg);
+            border-radius: 5px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            background-color: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+            transition: height 0.5s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 100;
+            }
+            
+            .sidebar {
+                width: 80%;
+                left: -80%;
+            }
+            
+            .tool-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tool-btn {
+                width: 100%;
+            }
+            
+            .profile-content {
+                flex-direction: column;
+            }
+            
+            .profile-sidebar {
+                width: 100%;
+            }
+            
+            .profile-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .music-player {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-effect"></div>
+    
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <h1 class="login-title">BEVIS TOOL TX</h1>
+            <div id="loginForm">
+                <input type="text" class="login-input" id="username" placeholder="Tên đăng nhập">
+                <input type="password" class="login-input" id="password" placeholder="Mật khẩu">
+                <button class="login-btn" id="loginBtn">Đăng nhập</button>
+                <div class="register-link">
+                    Chưa có tài khoản? <a href="#" id="showRegister">Đăng ký</a>
+                </div>
+                <div class="register-link">
+                    Hoặc <a href="#" id="googleLogin">Đăng nhập với Google</a>
+                </div>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <input type="text" class="login-input" id="regUsername" placeholder="Tên đăng nhập">
+                <input type="password" class="login-input" id="regPassword" placeholder="Mật khẩu">
+                <input type="password" class="login-input" id="regConfirmPassword" placeholder="Xác nhận mật khẩu">
+                <button class="login-btn" id="registerBtn">Đăng ký</button>
+                <div class="register-link">
+                    Đã có tài khoản? <a href="#" id="showLogin">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">Menu</h2>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-tool="home">Trang chủ</a></li>
+                <li><a href="#" data-tool="toolv4">Tool V4</a></li>
+                <li><a href="#" data-tool="toolv5">Tool V5</a></li>
+                <li><a href="#" data-tool="profile">Hồ sơ</a></li>
+                <li class="admin-only"><a href="#" data-tool="admin">Quản trị viên</a></li>
+                <li><a href="#" id="paymentBtn">Nạp tiền</a></li>
+                <li><a href="#" id="logoutBtn">Đăng xuất</a></li>
+            </ul>
+        </div>
+        
+        <div class="header">
+            <a href="#" class="logo">
+                <i class="fas fa-dice"></i> BEVIS TOOL TX
+            </a>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-balance" id="userBalance">10.000.000 VND</div>
+                <div class="timer" id="toolTimer">00:00:00</div>
+                <button class="logout-btn" id="logoutBtnMain">Đăng xuất</button>
+            </div>
+        </div>
+        
+        <div class="tool-selector">
+            <button class="tool-btn active" data-tool="home">Trang chủ</button>
+            <button class="tool-btn" data-tool="toolv4">Tool V4</button>
+            <button class="tool-btn" data-tool="toolv5">Tool V5</button>
+            <button class="tool-btn" data-tool="profile">Hồ sơ</button>
+            <button class="tool-btn admin-only" data-tool="admin">Quản trị viên</button>
+        </div>
+        
+        <!-- Home Tool -->
+        <div class="tool-container active" id="homeTool">
+            <h2 class="tool-title">Chào mừng đến với BEVIS TOOL TX</h2>
+            <p style="text-align: center; margin-bottom: 20px;">Công cụ hỗ trợ phân tích xác suất Tài Xỉu chính xác nhất</p>
+            
+            <div class="bot-container">
+                <div class="bot-header">
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-name">Bevis Bot</div>
+                    <div class="bot-status">Đang hoạt động</div>
+                </div>
+                <div class="bot-messages" id="botMessages">
+                    <div class="message">
+                        <div class="bot-message">
+                            Xin chào! Tôi là Bevis Bot, trợ lý ảo của bạn. Tôi có thể giúp bạn phân tích xác suất Tài Xỉu với độ chính xác cao.
+                            <div class="message-time">10:00</div>
+                        </div>
+                    </div>
+                    <div class="message">
+                        <div class="bot-message">
+                            Hãy chọn một công cụ từ menu để bắt đầu phân tích. Mỗi công cụ sẽ có hướng dẫn cụ thể.
+                            <div class="message-time">10:01</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-input-container">
+                    <input type="text" class="message-input" id="userMessage" placeholder="Nhập tin nhắn...">
+                    <button class="send-btn" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tool V4 -->
+        <div class="tool-container" id="toolV4">
+            <h2 class="tool-title">Công Cụ V4 - Phân Tích Xác Suất</h2>
+            <div class="input-group">
+                <label for="diceInput">Nhập 3 xí ngầu vừa ra (cách nhau bằng khoảng trắng):</label>
+                <input type="text" id="diceInput" placeholder="Ví dụ: 1 4 6">
+            </div>
+            <button class="submit-btn" id="analyzeV4">Phân Tích</button>
+            
+            <div class="result-container" id="resultV4">
+                <h3 class="result-title">Kết Quả Phân Tích</h3>
+                <div class="prediction" id="predictionV4"></div>
+                <div class="dice-probability" id="probabilityV4"></div>
+            </div>
+        </div>
+        
+        <!-- Tool V5 -->
+        <div class="tool-container" id="toolV5">
+            <h2 class="tool-title">Công Cụ V5 - Dự Đoán Xác Suất</h2>
+            <div class="input-group">
+                <label for="diceInputV5">Nhập 3 xí ngầu vừa ra (cách nhau bằng khoảng trắng):</label>
+                <input type="text" id="diceInputV5" placeholder="Ví dụ: 1 4 6">
+            </div>
+            <button class="submit-btn" id="analyzeV5">Dự Đoán</button>
+            
+            <div class="result-container" id="resultV5">
+                <h3 class="result-title">Kết Quả Dự Đoán</h3>
+                <div class="prediction" id="predictionV5"></div>
+                <div class="dice-probability" id="probabilityV5"></div>
+            </div>
+        </div>
+        
+        <!-- Profile Tool -->
+        <div class="tool-container" id="profileTool">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <div class="profile-info">
+                    <h2 class="profile-name" id="profileName">Username</h2>
+                    <div class="profile-role" id="profileRole">Người dùng</div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="statBalance">10.000.000</div>
+                            <div class="stat-label">Số dư (VND)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statTools">3</div>
+                            <div class="stat-label">Tool đã dùng</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statWinRate">75%</div>
+                            <div class="stat-label">Tỉ lệ thắng</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-sidebar">
+                    <ul class="profile-menu">
+                        <li><a href="#" class="active" data-tab="info">Thông tin cá nhân</a></li>
+                        <li><a href="#" data-tab="history">Lịch sử giao dịch</a></li>
+                        <li><a href="#" data-tab="stats">Thống kê</a></li>
+                        <li><a href="#" data-tab="settings">Cài đặt</a></li>
+                    </ul>
+                </div>
+                
+                <div class="profile-main">
+                    <div class="profile-section" id="infoTab">
+                        <h3 class="section-title">Thông tin cá nhân</h3>
+                        <div class="form-group">
+                            <label class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" value="username" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="user@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" value="0123456789">
+                        </div>
+                        <button class="save-btn">Lưu thay đổi</button>
+                    </div>
+                    
+                    <div class="profile-section" id="historyTab" style="display: none;">
+                        <h3 class="section-title">Lịch sử giao dịch</h3>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Loại</th>
+                                    <th>Số tiền</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01/08/2023 10:30</td>
+                                    <td>Nạp tiền</td>
+                                    <td>500.000 VND</td>
+                                    <td>Thành công</td>
+                                </tr>
+                                <tr>
+                                    <td>02/08/2023 15:45</td>
+                                    <td>Mua tool</td>
+                                    <td>10.000 VND</td>
+                                    <td>Thành công</td>
+                                </tr>
+                                <tr>
+                                    <td>03/08/2023 09:12</td>
+                                    <td>Mua tool</td>
+                                    <td>10.000 VND</td>
+                                    <td>Thành công</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="profile-section" id="statsTab" style="display: none;">
+                        <h3 class="section-title">Thống kê sử dụng</h3>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">15</div>
+                                <div class="stat-label">Lần sử dụng Tool V4</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Lần sử dụng Tool V5</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">75%</div>
+                                <div class="stat-label">Độ chính xác</div>
+                            </div>
+                        </div>
+                        <div class="history-chart" id="historyChart"></div>
+                    </div>
+                    
+                    <div class="profile-section" id="settingsTab" style="display: none;">
+                        <h3 class="section-title">Cài đặt tài khoản</h3>
+                        <div class="form-group">
+                            <label class="form-label">Thay đổi mật khẩu</label>
+                            <input type="password" class="form-control" placeholder="Mật khẩu hiện tại">
+                            <input type="password" class="form-control" placeholder="Mật khẩu mới" style="margin-top: 10px;">
+                            <input type="password" class="form-control" placeholder="Xác nhận mật khẩu mới" style="margin-top: 10px;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cài đặt thông báo</label>
+                            <div>
+                                <input type="checkbox" id="notif1" checked>
+                                <label for="notif1">Thông báo khi tool hết hạn</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="notif2" checked>
+                                <label for="notif2">Thông báo khuyến mãi</label>
+                            </div>
+                        </div>
+                        <button class="save-btn">Lưu cài đặt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Tool -->
+        <div class="tool-container" id="adminTool">
+            <h2 class="tool-title">Công Cụ Quản Trị Viên</h2>
+            
+            <div class="input-group">
+                <label for="adminUsername">Tên người dùng:</label>
+                <input type="text" id="adminUsername" placeholder="Nhập tên người dùng">
+            </div>
+            
+            <div class="input-group">
+                <label for="adminAmount">Số tiền (VND):</label>
+                <input type="number" id="adminAmount" placeholder="Nhập số tiền">
+            </div>
+            
+            <button class="submit-btn" id="addMoneyBtn">Thêm Tiền</button>
+            
+            <div class="result-container" id="adminResult" style="display: none;">
+                <h3 class="result-title">Kết Quả</h3>
+                <div id="adminMessage"></div>
+            </div>
+            
+            <div class="input-group" style="margin-top: 30px;">
+                <h3 class="section-title">Danh sách người dùng</h3>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Tên đăng nhập</th>
+                            <th>Số dư (VND)</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userList">
+                        <tr>
+                            <td>user1</td>
+                            <td>500.000</td>
+                            <td>Hoạt động</td>
+                            <td><button class="copy-btn">Sửa</button></td>
+                        </tr>
+                        <tr>
+                            <td>user2</td>
+                            <td>1.200.000</td>
+                            <td>Hoạt động</td>
+                            <td><button class="copy-btn">Sửa</button></td>
+                        </tr>
+                        <tr>
+                            <td>user3</td>
+                            <td>0</td>
+                            <td>Khóa</td>
+                            <td><button class="copy-btn">Sửa</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 BEVIS TOOL TX - All rights reserved
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <h2 class="payment-title">Nạp Tiền Vào Tài Khoản</h2>
+            <div class="payment-info">
+                <div class="payment-item">
+                    <span>Số tài khoản:</span>
+                    <span>1234567890 <button class="copy-btn" data-text="1234567890">Sao chép</button></span>
+                </div>
+                <div class="payment-item">
+                    <span>Chủ tài khoản:</span>
+                    <span>NGUYEN VAN A</span>
+                </div>
+                <div class="payment-item">
+                    <span>Ngân hàng:</span>
+                    <span>Vietcombank</span>
+                </div>
+                <div class="payment-item">
+                    <span>Nội dung chuyển khoản:</span>
+                    <span>NAP username <button class="copy-btn" data-text="NAP username">Sao chép</button></span>
+                </div>
+            </div>
+            <div class="payment-note">
+                <p><strong>Lưu ý:</strong> Sau khi chuyển khoản, tiền sẽ được cộng vào tài khoản của bạn trong vòng 5-10 phút.</p>
+                <p>Nếu có bất kỳ vấn đề gì, vui lòng liên hệ với hỗ trợ viên qua Zalo: 0123456789</p>
+            </div>
+            <button class="close-payment" id="closePayment">Đóng</button>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-header">
+            <h3 class="notification-title" id="notificationTitle">Thông báo</h3>
+            <button class="close-notification" id="closeNotification">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-content" id="notificationContent">
+            Nội dung thông báo
+        </div>
+        <div class="notification-footer">
+            <button class="notification-btn" id="notificationOk">OK</button>
+            <button class="notification-btn" id="notificationCancel">Hủy</button>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="music-control" id="playPause">
+            <i class="fas fa-play"></i>
+        </div>
+        <div class="music-info">
+            <div class="music-title">Nhạc nền BEVIS</div>
+            <div class="music-artist">Sound Effect</div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginPage = document.getElementById('loginPage');
+            const appContainer = document.getElementById('appContainer');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const googleLogin = document.getElementById('googleLogin');
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const toolBtns = document.querySelectorAll('.tool-btn');
+            const toolContainers = document.querySelectorAll('.tool-container');
+            const analyzeV4 = document.getElementById('analyzeV4');
+            const analyzeV5 = document.getElementById('analyzeV5');
+            const resultV4 = document.getElementById('resultV4');
+            const resultV5 = document.getElementById('resultV5');
+            const paymentBtn = document.getElementById('paymentBtn');
+            const paymentModal = document.getElementById('paymentModal');
+            const closePayment = document.getElementById('closePayment');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutBtnMain = document.getElementById('logoutBtnMain');
+            const notification = document.getElementById('notification');
+            const closeNotification = document.getElementById('closeNotification');
+            const notificationOk = document.getElementById('notificationOk');
+            const notificationCancel = document.getElementById('notificationCancel');
+            const playPause = document.getElementById('playPause');
+            const cursorEffect = document.querySelector('.cursor-effect');
+            const addMoneyBtn = document.getElementById('addMoneyBtn');
+            const adminResult = document.getElementById('adminResult');
+            const profileMenu = document.querySelectorAll('.profile-menu a');
+            const profileTabs = document.querySelectorAll('.profile-section');
+            
+            // Sound Effects
+            const clickSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+            const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+            const errorSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3');
+            
+            // App State
+            let currentUser = null;
+            let isPlaying = false;
+            let toolTimer = null;
+            let toolEndTime = null;
+            
+            // Initialize
+            init();
+            
+            function init() {
+                // Check if user is logged in
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    currentUser = JSON.parse(savedUser);
+                    showApp();
+                }
+                
+                // Set up event listeners
+                setupEventListeners();
+                
+                // Initialize history chart
+                initHistoryChart();
+            }
+            
+            function setupEventListeners() {
+                // Login/Register events
+                showRegister.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                    playSound(clickSound);
+                });
+                
+                showLogin.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    registerForm.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    playSound(clickSound);
+                });
+                
+                loginBtn.addEventListener('click', function() {
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+                    
+                    if (username === 'leduc' && password === 'bevis') {
+                        currentUser = {
+                            username: 'leduc',
+                            role: 'admin',
+                            balance: 10000000
+                        };
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        showApp();
+                        playSound(successSound);
+                    } else if (username && password) {
+                        currentUser = {
+                            username: username,
+                            role: 'user',
+                            balance: 0
+                        };
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        showApp();
+                        playSound(successSound);
+                    } else {
+                        showNotification('Lỗi', 'Vui lòng nhập tên đăng nhập và mật khẩu');
+                        playSound(errorSound);
+                    }
+                });
+                
+                registerBtn.addEventListener('click', function() {
+                    const username = document.getElementById('regUsername').value;
+                    const password = document.getElementById('regPassword').value;
+                    const confirmPassword = document.getElementById('regConfirmPassword').value;
+                    
+                    if (!username || !password || !confirmPassword) {
+                        showNotification('Lỗi', 'Vui lòng điền đầy đủ thông tin');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    if (password !== confirmPassword) {
+                        showNotification('Lỗi', 'Mật khẩu xác nhận không khớp');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    currentUser = {
+                        username: username,
+                        role: 'user',
+                        balance: 0
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showApp();
+                    showNotification('Thành công', 'Đăng ký tài khoản thành công!');
+                    playSound(successSound);
+                });
+                
+                googleLogin.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showNotification('Thông báo', 'Tính năng đăng nhập bằng Google sẽ sớm được cập nhật');
+                    playSound(clickSound);
+                });
+                
+                // Menu events
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.add('open');
+                    playSound(clickSound);
+                });
+                
+                closeSidebar.addEventListener('click', function() {
+                    sidebar.classList.remove('open');
+                    playSound(clickSound);
+                });
+                
+                // Tool selection events
+                toolBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const tool = this.getAttribute('data-tool');
+                        
+                        toolBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        toolContainers.forEach(container => {
+                            container.classList.remove('active');
+                        });
+                        
+                        document.getElementById(tool + 'Tool').classList.add('active');
+                        
+                        playSound(clickSound);
+                    });
+                });
+                
+                // Tool V4 analysis
+                analyzeV4.addEventListener('click', function() {
+                    const diceInput = document.getElementById('diceInput').value;
+                    const diceValues = diceInput.trim().split(' ').map(Number);
+                    
+                    if (diceValues.length !== 3 || diceValues.some(isNaN)) {
+                        showNotification('Lỗi', 'Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    // Check if user has enough balance
+                    if (currentUser.balance < 10000) {
+                        showNotification('Lỗi', 'Bạn không đủ tiền để sử dụng công cụ này');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    // Deduct balance
+                    currentUser.balance -= 10000;
+                    updateBalance();
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    // Start timer
+                    startToolTimer();
+                    
+                    // Analyze dice
+                    const analysis = analyzeDiceV4(diceValues);
+                    
+                    // Display results
+                    document.getElementById('predictionV4').innerHTML = analysis.prediction;
+                    document.getElementById('probabilityV4').innerHTML = analysis.probability;
+                    resultV4.style.display = 'block';
+                    
+                    playSound(successSound);
+                });
+                
+                // Tool V5 analysis
+                analyzeV5.addEventListener('click', function() {
+                    const diceInput = document.getElementById('diceInputV5').value;
+                    const diceValues = diceInput.trim().split(' ').map(Number);
+                    
+                    if (diceValues.length !== 3 || diceValues.some(isNaN)) {
+                        showNotification('Lỗi', 'Vui lòng nhập 3 số hợp lệ, cách nhau bằng khoảng trắng');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    // Check if user has enough balance
+                    if (currentUser.balance < 10000) {
+                        showNotification('Lỗi', 'Bạn không đủ tiền để sử dụng công cụ này');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    // Deduct balance
+                    currentUser.balance -= 10000;
+                    updateBalance();
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    // Start timer
+                    startToolTimer();
+                    
+                    // Analyze dice
+                    const analysis = analyzeDiceV5(diceValues);
+                    
+                    // Display results
+                    document.getElementById('predictionV5').innerHTML = analysis.prediction;
+                    document.getElementById('probabilityV5').innerHTML = analysis.probability;
+                    resultV5.style.display = 'block';
+                    
+                    playSound(successSound);
+                });
+                
+                // Payment events
+                paymentBtn.addEventListener('click', function() {
+                    paymentModal.style.display = 'flex';
+                    playSound(clickSound);
+                });
+                
+                closePayment.addEventListener('click', function() {
+                    paymentModal.style.display = 'none';
+                    playSound(clickSound);
+                });
+                
+                // Logout events
+                logoutBtn.addEventListener('click', function() {
+                    logout();
+                    playSound(clickSound);
+                });
+                
+                logoutBtnMain.addEventListener('click', function() {
+                    logout();
+                    playSound(clickSound);
+                });
+                
+                // Notification events
+                closeNotification.addEventListener('click', function() {
+                    notification.style.display = 'none';
+                    playSound(clickSound);
+                });
+                
+                notificationOk.addEventListener('click', function() {
+                    notification.style.display = 'none';
+                    playSound(clickSound);
+                });
+                
+                notificationCancel.addEventListener('click', function() {
+                    notification.style.display = 'none';
+                    playSound(clickSound);
+                });
+                
+                // Music player events
+                playPause.addEventListener('click', function() {
+                    if (isPlaying) {
+                        playPause.innerHTML = '<i class="fas fa-play"></i>';
+                    } else {
+                        playPause.innerHTML = '<i class="fas fa-pause"></i>';
+                    }
+                    isPlaying = !isPlaying;
+                    playSound(clickSound);
+                });
+                
+                // Cursor effect
+                document.addEventListener('mousemove', function(e) {
+                    cursorEffect.style.display = 'block';
+                    cursorEffect.style.left = e.pageX + 'px';
+                    cursorEffect.style.top = e.pageY + 'px';
+                });
+                
+                document.addEventListener('click', function() {
+                    cursorEffect.style.animation = 'none';
+                    void cursorEffect.offsetWidth;
+                    cursorEffect.style.animation = 'cursorPulse 1.5s infinite';
+                });
+                
+                // Admin add money
+                addMoneyBtn.addEventListener('click', function() {
+                    if (currentUser.role !== 'admin') {
+                        showNotification('Lỗi', 'Bạn không có quyền thực hiện chức năng này');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    const username = document.getElementById('adminUsername').value;
+                    const amount = parseInt(document.getElementById('adminAmount').value);
+                    
+                    if (!username || !amount) {
+                        showNotification('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+                        playSound(errorSound);
+                        return;
+                    }
+                    
+                    // In a real app, this would call an API to add money to the user's account
+                    document.getElementById('adminMessage').innerHTML = `Đã thêm ${amount.toLocaleString()} VND vào tài khoản ${username}`;
+                    adminResult.style.display = 'block';
+                    
+                    playSound(successSound);
+                });
+                
+                // Profile menu
+                profileMenu.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const tab = this.getAttribute('data-tab');
+                        
+                        profileMenu.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        profileTabs.forEach(t => t.style.display = 'none');
+                        document.getElementById(tab + 'Tab').style.display = 'block';
+                        
+                        playSound(clickSound);
+                    });
+                });
+            }
+            
+            function showApp() {
+                loginPage.style.display = 'none';
+                appContainer.style.display = 'block';
+                
+                // Update user info
+                updateUserInfo();
+                
+                // Show admin features if user is admin
+                if (currentUser.role === 'admin') {
+                    document.querySelectorAll('.admin-only').forEach(el => {
+                        el.style.display = 'block';
+                    });
+                    document.body.classList.add('admin-mode');
+                }
+            }
+            
+            function updateUserInfo() {
+                document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+                document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString() + ' VND';
+                
+                document.getElementById('profileAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+                document.getElementById('profileName').textContent = currentUser.username;
+                document.getElementById('profileRole').textContent = currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng';
+                document.getElementById('statBalance').textContent = currentUser.balance.toLocaleString();
+            }
+            
+            function updateBalance() {
+                document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString() + ' VND';
+                document.getElementById('statBalance').textContent = currentUser.balance.toLocaleString();
+            }
+            
+            function logout() {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                appContainer.style.display = 'none';
+                loginPage.style.display = 'flex';
+                
+                // Reset forms
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('regUsername').value = '';
+                document.getElementById('regPassword').value = '';
+                document.getElementById('regConfirmPassword').value = '';
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                
+                // Hide admin features
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = 'none';
+                });
+                document.body.classList.remove('admin-mode');
+            }
+            
+            function showNotification(title, content) {
+                document.getElementById('notificationTitle').textContent = title;
+                document.getElementById('notificationContent').textContent = content;
+                notification.style.display = 'block';
+            }
+            
+            function playSound(sound) {
+                sound.currentTime = 0;
+                sound.play();
+            }
+            
+            function analyzeDiceV4(diceValues) {
+                const sum = diceValues.reduce((a, b) => a + b, 0);
+                const isTai = sum >= 11;
+                
+                // Simulate analysis based on previous patterns
+                const patterns = [
+                    { sequence: ['TÀI', 'XỈU', 'XỈU'], probability: 85 },
+                    { sequence: ['TÀI', 'TÀI', 'TÀI'], probability: 72 },
+                    { sequence: ['TÀI', 'XỈU', 'TÀI'], probability: 68 },
+                    { sequence: ['XỈU', 'XỈU', 'TÀI'], probability: 78 },
+                    { sequence: ['XỈU', 'TÀI', 'TÀI'], probability: 65 }
+                ];
+                
+                // Select two patterns with highest probability
+                const selectedPatterns = patterns.sort((a, b) => b.probability - a.probability).slice(0, 2);
+                
+                let predictionHTML = `<p>Kết quả hiện tại: <span class="${isTai ? 'tai' : 'xiu'}">${isTai ? 'TÀI' : 'XỈU'}</span></p>`;
+                predictionHTML += `<p>Dự đoán ván tiếp theo:</p>`;
+                
+                let probabilityHTML = '<div class="probability-item">';
+                
+                selectedPatterns.forEach(pattern => {
+                    const nextResult = pattern.sequence[2];
+                    predictionHTML += `<p>- ${pattern.sequence[0]} - ${pattern.sequence[1]} - <span class="${nextResult === 'TÀI' ? 'tai' : 'xiu'}">${nextResult}</span> (${pattern.probability}%)</p>`;
+                    
+                    probabilityHTML += `
+                        <div>
+                            <span>${pattern.sequence.join(' - ')}</span>
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: ${pattern.probability}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                probabilityHTML += '</div>';
+                
+                return {
+                    prediction: predictionHTML,
+                    probability: probabilityHTML
+                };
+            }
+            
+            function analyzeDiceV5(diceValues) {
+                const sum = diceValues.reduce((a, b) => a + b, 0);
+                const isTai = sum >= 11;
+                
+                // Simulate analysis for next result
+                const winProbability = Math.floor(Math.random() * 51) + 50; // 50-100%
+                const nextIsTai = winProbability > 65;
+                
+                // Generate random dice for prediction
+                const nextDice = [
+                    Math.floor(Math.random() * 6) + 1,
+                    Math.floor(Math.random() * 6) + 1,
+                    Math.floor(Math.random() * 6) + 1
+                ];
+                const nextSum = nextDice.reduce((a, b) => a + b, 0);
+                const nextIsTaiActual = nextSum >= 11;
+                
+                let predictionHTML = `
+                    <p>Kết quả người dùng: ${diceValues.join('-')} (${isTai ? 'TÀI' : 'XỈU'})</p>
+                    <p>Kết quả ván sau: <span class="${nextIsTai ? 'tai' : 'xiu'}">${nextIsTai ? 'TÀI' : 'XỈU'}</span></p>
+                    <p>Xí ngầu dự đoán: ${nextDice.join('-')} (Tổng: ${nextSum})</p>
+                    <p>Xác suất thắng: ${winProbability}%</p>
+                `;
+                
+                let probabilityHTML = `
+                    <div class="probability-item">
+                        <div>
+                            <span>Độ chính xác dự đoán</span>
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: ${winProbability}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                return {
+                    prediction: predictionHTML,
+                    probability: probabilityHTML
+                };
+            }
+            
+            function startToolTimer() {
+                // Set tool end time to 3 hours from now
+                toolEndTime = new Date().getTime() + (3 * 60 * 60 * 1000);
+                
+                // Update timer immediately
+                updateToolTimer();
+                
+                // Update timer every second
+                if (toolTimer) {
+                    clearInterval(toolTimer);
+                }
+                
+                toolTimer = setInterval(updateToolTimer, 1000);
+            }
+            
+            function updateToolTimer() {
+                if (!toolEndTime) return;
+                
+                const now = new Date().getTime();
+                const distance = toolEndTime - now;
+                
+                // If the countdown is over, clear the timer
+                if (distance < 0) {
+                    clearInterval(toolTimer);
+                    document.getElementById('toolTimer').textContent = '00:00:00';
+                    showNotification('Hết hạn', 'Thời gian sử dụng tool của bạn đã hết. Vui lòng thanh toán để tiếp tục sử dụng.');
+                    return;
+                }
+                
+                // Calculate hours, minutes and seconds
+                const hours = Math.floor(distance / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Display the result
+                document.getElementById('toolTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function initHistoryChart() {
+                const historyChart = document.getElementById('historyChart');
+                const data = [15, 12, 8, 10, 7, 14, 11];
+                const maxValue = Math.max(...data);
+                
+                data.forEach((value, index) => {
+                    const bar = document.createElement('div');
+                    bar.className = 'chart-bar';
+                    bar.style.height = `${(value / maxValue) * 100}%`;
+                    bar.style.left = `${index * (100 / data.length)}%`;
+                    bar.style.width = `${(90 / data.length)}%`;
+                    historyChart.appendChild(bar);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
